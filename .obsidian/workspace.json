@@ -1,0 +1,218 @@
+{
+  "main": {
+    "id": "43547e6d3ea5565a",
+    "type": "split",
+    "children": [
+      {
+        "id": "5999aee374ca4932",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7dad875aa7a089a3",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2526252d5c01d5f5",
+    "type": "split",
+    "children": [
+      {
+        "id": "e1c78ffd9765ce69",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0a4882dee90001d5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "52dfee45d467f2f8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "e417eb3d179f5ec4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a8ce8d2c0fae40b2",
+    "type": "split",
+    "children": [
+      {
+        "id": "5b4fb8f5d36351c4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7195a7c3da13c080",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "03 Desarrollo/Flujo TDD.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "00de4a5d5f7f2626",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "03 Desarrollo/Flujo TDD.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "a7e82f74eeec69aa",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "241f85a325e78ec4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "bfcb1f427641667c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "03 Desarrollo/Flujo TDD.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "7dad875aa7a089a3",
+  "lastOpenFiles": [
+    "03 Desarrollo/Flujo TDD.md",
+    "04 Planeación/Roadmap MVP.md",
+    "03 Desarrollo/Convenciones de Git y ramas.md",
+    "03 Desarrollo/CI-CD.md",
+    "02 Arquitectura/Contenedores y despliegue.md",
+    "02 Arquitectura/Frontend - Expo feature-based.md",
+    "02 Arquitectura/Base de datos - PostgreSQL.md",
+    "02 Arquitectura/Backend - Clean Architecture.md",
+    "02 Arquitectura/Arquitectura general.md",
+    "01 Proyecto/Visión del proyecto.md",
+    "01 Proyecto/Requerimientos no funcionales.md",
+    "01 Proyecto/Requerimientos funcionales.md",
+    "01 Proyecto/Glosario.md",
+    "01 Proyecto/Actores y roles.md",
+    "04 Planeación",
+    "03 Desarrollo/Estrategia de pruebas.md",
+    "03 Desarrollo/Definition of Done.md",
+    "03 Desarrollo",
+    "02 Arquitectura/ADR/ADR-006 Sin librerías comerciales en el núcleo.md",
+    "02 Arquitectura/ADR/ADR-005 TDD como flujo obligatorio.md",
+    "02 Arquitectura/ADR/ADR-004 PostgreSQL con PostGIS.md",
+    "02 Arquitectura/ADR/ADR-003 Expo y TypeScript.md",
+    "02 Arquitectura/ADR/ADR-002 Clean Architecture en el backend.md",
+    "02 Arquitectura/ADR/ADR-001 Repositorios separados.md",
+    "02 Arquitectura/ADR",
+    "02 Arquitectura",
+    "01 Proyecto",
+    "00 - MOC Waggo.md"
+  ]
+}
