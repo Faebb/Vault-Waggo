@@ -25,7 +25,7 @@ created: 2026-09-26
 - [[Frontend - Expo feature-based]]
 - [[Base de datos - PostgreSQL]]
 - [[Contenedores y despliegue]]
-- Decisiones (ADR): [[ADR-001 Repositorios separados]] · [[ADR-002 Clean Architecture en el backend]] · [[ADR-003 Expo y TypeScript]] · [[ADR-004 PostgreSQL con PostGIS]] · [[ADR-005 TDD como flujo obligatorio]] · [[ADR-006 Sin librerías comerciales en el núcleo]] · [[ADR-007 Envolventes WaggoResponse y WaggoApiResponse]] · [[ADR-008 Convenciones de código obligatorias]] · [[ADR-009 Validación de entrada con FluentValidation]] · [[ADR-010 Excepciones custom y middleware centralizado]] · [[ADR-011 Autenticación OAuth 2.0 con roles]] · [[ADR-012 Estructura de carpetas por tipo]] · [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica]] · [[ADR-014 Pasarela de pagos detrás de un puerto]] · [[ADR-015 Selector de tema claro-oscuro]] · [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API]]
+- Decisiones (ADR): [[ADR-001 Repositorios separados]] · [[ADR-002 Clean Architecture en el backend]] · [[ADR-003 Expo y TypeScript]] · [[ADR-004 PostgreSQL con PostGIS]] · [[ADR-005 TDD como flujo obligatorio]] · [[ADR-006 Sin librerías comerciales en el núcleo]] · [[ADR-007 Envolventes WaggoResponse y WaggoApiResponse]] · [[ADR-008 Convenciones de código obligatorias]] · [[ADR-009 Validación de entrada con FluentValidation]] · [[ADR-010 Excepciones custom y middleware centralizado]] · [[ADR-011 Autenticación OAuth 2.0 con roles]] · [[ADR-012 Estructura de carpetas por tipo]] · [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica|ADR-013 (superada por ADR-018)]] · [[ADR-014 Pasarela de pagos detrás de un puerto]] · [[ADR-015 Selector de tema claro-oscuro]] · [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API]] · [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft]] · [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]] · [[ADR-019 Navegación por pestañas y estados de carga con skeletons|ADR-019]]
 
 ## 3. Flujo de desarrollo
 - [[Flujo TDD]]
@@ -40,6 +40,7 @@ created: 2026-09-26
 ## 4. Planeación
 - [[Roadmap MVP]]
 - [[Estado de implementación]] — trazabilidad RF → código
+- [[Backlog - Perfil de usuario y panel de administración]] — ideas para desarrollar en paralelo al login social
 
 ## Repositorios
 | Repo | Contenido | Ruta local | Guía para agentes |
