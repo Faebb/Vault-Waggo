@@ -149,6 +149,19 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrad
 | Api | `Waggo.Api/Endpoints/Identity/UsersEndpoints.cs` — `GET/PUT /api/v1/users/me` (cualquier rol autenticado) | pruebas de integración de `Users` |
 | Mobile | `src/features/profile/` — `profileApi` (`getMyProfile`, `updateMyProfile`), `useMyProfile`, `SettingsScreen` (resumen + entrada "Información personal"), `PersonalInfoScreen`, `EditProfileScreen` | `*.test.ts[x]` junto a cada archivo |
 
+### UX-003 Perfil y configuración de cuenta — ✅ slice TDD
+No es un RF del SRS: extiende `Identity` (RF-001/ADR-016) en vez de ampliar el contrato de registro. Spec: `waggo-workspace/specs/UX-003-perfil-y-configuracion-de-cuenta.md` · Decisión: [[ADR-020 Perfil de usuario como extensión de Identity|ADR-020]].
+| Capa | Archivos | Pruebas |
+|---|---|---|
+| Domain | `User.{FullName, Phone, UpdateProfile, ChangePassword}`; 4 errores nuevos en `IdentityErrors` | `UserTests` (casos nuevos) |
+| Application | `Identity/{PasswordPolicy, UserProfileResponse}`, `Identity/Queries/GetMyProfile/`, `Identity/Commands/{UpdateProfile, ChangePassword}/`; `RegisterCommandValidator` ahora delega en `PasswordPolicy` | `GetMyProfileHandlerTests`, `UpdateProfileHandlerTests`, `ChangePasswordHandlerTests` |
+| Infrastructure | `UserConfiguration` (`full_name`, `phone`), migración `AddUserProfileFields` | vía integración |
+| Api | `Waggo.Api/Endpoints/Users/` — `GET/PATCH /api/v1/users/me`, `POST /api/v1/users/me/password` (cualquier usuario autenticado, sin rol específico) | `UsersEndpointTests`, `UpdateProfileRequestValidatorTests`, `ChangePasswordRequestValidatorTests` |
+| Mobile | `src/features/profile/` — `ProfileScreen` (`/perfil`), `EditProfileScreen` (`/perfil/editar`), `ChangePasswordScreen` (`/perfil/contrasena`); `httpClient.patch` nuevo; enlace "Perfil" en `_layout.tsx` solo con sesión; reutiliza `logout()` de `features/auth` | `*.test.ts[x]` junto a cada archivo |
+
+> [!warning] Discrepancia vault ↔ código
+> Esta nota ya listaba un slice "Recuperación de contraseña (RF-001 + RF-005)" con `Identity/PasswordPolicy` compartida. Al implementar UX-003 se verificó que ese código **no existe** en `waggo-api` (ni `ForgotPassword`/`ResetPassword`, ni la spec correspondiente en `specs/`). `Identity/PasswordPolicy` se creó de cero en este slice; si la recuperación de contraseña se retoma, debe reutilizarla. Ver detalle en la spec UX-003.
+
 ### RF-002 + RF-003 Paseadores verificados — ✅ slice TDD (verificación manual)
 Spec: `waggo-workspace/specs/RF-002-RF-003-paseadores-verificados.md`. Mientras se elige el proveedor de identidad y antecedentes, un administrador aprueba o rechaza. Foto y documento escaneado quedan para un slice con almacenamiento de archivos.
 | Capa | Archivos | Pruebas |
