@@ -75,15 +75,15 @@ throw new NotFoundException(WalkErrors.NotFound, $"Walk {walkId} not found");
 > - Si el error no se conoce (500): *"Ocurrió un error inesperado. Intenta de nuevo más tarde y, si el problema continúa, comunícate con el administrador indicando el código de seguimiento {traceId}."* El mismo `traceId` va en el log con la excepción completa.
 
 ## Autenticación y autorización
-- **JWT propio**: la API emite y valida sus propios access tokens JWT (HS256, `Authentication:Jwt:SigningKey`/`Issuer`), sin proveedor OAuth externo — decisión [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]], que resuelve el "pendiente de proveedor" de [[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]. Login, 2FA por correo y refresh rotativo: ver `RF-001-RF-005-identidad-y-login` en [[Estado de implementación]].
+- **JWT propio**: la API emite y valida sus propios access tokens JWT (HS256, `Authentication:Jwt:SigningKey`/`Issuer`), sin proveedor OAuth externo — decisión [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]], que resuelve el "pendiente de proveedor" de [[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]. Login directo (sin 2FA, [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]]) y refresh rotativo: ver `RF-001-RF-005-identidad-y-login` en [[Estado de implementación]]. Login social (Google/Microsoft) de ADR-017 todavía no está implementado.
 - **Roles**: `owner`, `walker`, `admin` (`WaggoRoles`). Políticas: `WaggoPolicies.Owner` (owner o admin), `Walker` (walker o admin), `Admin`.
-- **Seguro por defecto**: todo endpoint exige usuario autenticado salvo que diga `AllowAnonymous` (`/auth/{register,confirm,login,login/verify,refresh}`, health checks, OpenAPI en desarrollo).
+- **Seguro por defecto**: todo endpoint exige usuario autenticado salvo que diga `AllowAnonymous` (`/auth/{register,confirm,login,refresh}`, health checks, OpenAPI en desarrollo).
 - En cada endpoint: `.RequireAuthorization(WaggoPolicies.Owner)`.
 
 ### Desarrollo sin autenticación (solo pruebas de integración)
 - `appsettings.Development.json` → `Authentication:UseDevelopmentUser = true`: cada request entra como un usuario de desarrollo con los roles configurados (por defecto los tres). No hace falta token.
 - Para probar reglas por rol se envía el header `X-Dev-Roles: walker` (o varios separados por coma). Para actuar como otro usuario, `X-Dev-User-Id: otro-dueno` (las pruebas de integración lo usan para verificar que un dueño no ve datos de otro).
-- La app mobile **ya no usa estos headers**: desde RF-001+RF-005 se autentica con `/auth/login` (+ 2FA) y envía `Authorization: Bearer <JWT>`, con refresh silencioso; ver [[Frontend - Expo feature-based]].
+- La app mobile **ya no usa estos headers**: desde RF-001+RF-005 se autentica con `/auth/login` (sesión directa, sin 2FA — ADR-017) y envía `Authorization: Bearer <JWT>`, con refresh silencioso; ver [[Frontend - Expo feature-based]].
 - Los casos de uso obtienen al usuario con `ICurrentUser` (Application), que la API implementa con `HttpCurrentUser` a partir del claim `sub` (o el id del usuario de desarrollo).
 - La API **se niega a arrancar** si el usuario de desarrollo está activo en Production, o si no hay `SigningKey` y el usuario de desarrollo está apagado.
 

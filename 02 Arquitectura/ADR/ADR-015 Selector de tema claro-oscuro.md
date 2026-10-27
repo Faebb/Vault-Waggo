@@ -9,6 +9,9 @@ date: 2026-10-01
 
 Volver a [[00 - MOC Waggo]] · Guía: [[Frontend - Expo feature-based]] · Amplía [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica|ADR-013]]
 
+> [!warning] Ajustada por [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]] · 2026-10-24
+> El mecanismo descrito aquí (mini-store, `useThemedStyles`, persistencia local) sigue vigente tal cual. Lo que cambia: los valores de `lightColors`/`darkColors` (nueva paleta, el acento ya no es idéntico en ambos temas) y el modo por defecto, que pasa de oscuro a **claro**. El mockup `Vault Waggo/Sistema de diseño-html` que originó esta ADR fue reemplazado por `Sistema de diseño - Seashell & Sapphire.html`.
+
 > [!info] Estado: **Aceptada** · 2026-10-01 · Pedida por el PO a partir del mockup "Sistema de diseño v1"
 
 ## Contexto

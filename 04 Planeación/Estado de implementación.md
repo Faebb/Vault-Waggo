@@ -1,7 +1,7 @@
 ---
 title: Estado de implementación
 tags: [waggo, planeacion, trazabilidad]
-updated: 2026-10-20
+updated: 2026-10-26
 ---
 
 # Estado de implementación
@@ -14,8 +14,8 @@ Volver a [[00 - MOC Waggo]] · Plan: [[Roadmap MVP]]
 ## Repositorios
 | Repo | Rama | Último commit | Estado |
 |---|---|---|---|
-| `Faebb/waggo-api` | `main` | `feat(identity): login, 2FA by email and rotating JWT session (RF-005)` | Identidad y login completo (mergeado a main, 2026-10-20) |
-| `Faebb/waggo-mobile` | `main` | `feat(auth): register, login, 2FA and session screens (RF-001, RF-005)` | Identidad y login completo (mergeado a main, 2026-10-20) |
+| `Faebb/waggo-api` | `main` | `feat(identity): user profile - full name and phone (GET/PUT /users/me)` (#20) | Login sin 2FA (ADR-017) + perfil propio nombre/celular (mergeado a main, 2026-10-25) |
+| `Faebb/waggo-mobile` | `main` | `feat(nav): bottom tab bar for owner + skeleton loading states` (#21) | Navegación por pestañas y skeletons (ADR-019); perfil propio y cola de verificación de paseadores ya integrados (mergeado a main, 2026-10-25) |
 | `Faebb/waggo-workspace` | `main` | `docs(specs): mark the mobile slice of RF-001/RF-005 as implemented` | Todas las specs al día (mergeado a main, 2026-10-20) |
 
 ## Trazabilidad RF → código
@@ -70,7 +70,7 @@ Specs: `waggo-workspace/specs/RF-007-solicitud-de-paseo-dueno.md` y `RF-007-soli
 | Paseador (API) | `Walk.Accept` (primero gana, `xmin`), `GET /walks/available` (orden por distancia haversine), `POST /walks/{id}/accept`, `GET /walks/assigned`; `GET /walks/{id}` también para el paseador asignado | `WalkerEndpointTests`, `WalkConcurrencyTests`, `AcceptWalkHandlerTests`, `ListAvailableWalksHandlerTests` |
 | Paseador (mobile) | `src/features/walker` (`/paseador`, `/paseador/[id]`); requiere sesión autenticada con rol `walker` (`shared/auth`, ver RF-001+RF-005) | `WalkerHomeScreen.test.tsx`, `AssignedWalkScreen.test.tsx` |
 
-### RF-008 GPS en tiempo real · RF-011 Métricas del paseo — ✅ slice TDD (en vivo con SignalR)
+### RF-008 GPS en tiempo real · RF-011 Métricas del paseo — ✅ slice TDD (por polling; SignalR 🚧 en progreso)
 Spec: `waggo-workspace/specs/RF-008-paseo-en-vivo.md`.
 | Capa | Archivos | Pruebas |
 |---|---|---|
@@ -89,7 +89,7 @@ Spec: `waggo-workspace/specs/RF-012-alerta-de-emergencia.md`. La notificación p
 | Infrastructure / Api | `tracking.walk_alerts` (migración `AddWalkAlerts`); `POST /walks/{id}/emergency`, `GET /walks/{id}/alerts` | `AlertEndpointTests` |
 | Mobile | `src/features/tracking` — `WalkSafety`, `EmergencyButton`, `AlertBanner` en las pantallas del dueño y del paseador | `*.test.ts[x]` junto a cada archivo |
 
-### RF-013 Chat interno — ✅ slice TDD (en vivo con SignalR)
+### RF-013 Chat interno — ✅ slice TDD (por polling; SignalR 🚧 en progreso)
 Spec: `waggo-workspace/specs/RF-013-chat-del-paseo.md`.
 | Capa | Archivos | Pruebas |
 |---|---|---|
@@ -110,8 +110,11 @@ Spec: `waggo-workspace/specs/RF-009-RF-010-alertas-automaticas.md`. Radio 1,5 km
 ### RF-006 Matching por cercanía — ✅
 Spec: `waggo-workspace/specs/RF-006-matching-por-cercania.md`. `GET /walks/available` con ubicación: `ST_DWithin` (5 km) + `ORDER BY ST_Distance` en PostGIS (`WalkRepository.ListRequestedNearAsync`). "Solo paseadores verificados" llegó con RF-002/RF-003. Pruebas: `WalkerEndpointTests`, `ListAvailableWalksHandlerTests`.
 
-### Tiempo real con SignalR (RF-008, RF-012, RF-013, RNF-007) — ✅ slice TDD
-Spec: `waggo-workspace/specs/RF-008-RF-013-tiempo-real-signalr.md`. El hub solo avisa *qué* cambió; la app recarga ese recurso por la API REST y deja el polling como respaldo de 30 s.
+### Tiempo real con SignalR (RF-008, RF-012, RF-013, RNF-007) — 🚧 en progreso
+> [!warning] Aún no está en `main` (2026-10-26)
+> El trabajo existe solo como cambios **sin commitear** en los worktrees `.worktrees/api-realtime`, `.worktrees/mobile-realtime` y `.worktrees/workspace-realtime` (rama `feat/realtime-signalr`, sin PR). La spec tampoco está en `main` del workspace. La tabla describe el diseño previsto; en `main` la app sigue usando solo polling.
+
+Spec (en el worktree): `waggo-workspace/specs/RF-008-RF-013-tiempo-real-signalr.md`. El hub solo avisa *qué* cambió; la app recarga ese recurso por la API REST y deja el polling como respaldo de 30 s.
 | Capa | Archivos | Pruebas |
 |---|---|---|
 | Domain / Application | `Enums/Walks/WalkUpdateKind`; puerto `IWalkLiveUpdates`, llamado por los 7 handlers que cambian un paseo | `*HandlerTests` |
@@ -119,19 +122,34 @@ Spec: `waggo-workspace/specs/RF-008-RF-013-tiempo-real-signalr.md`. El hub solo 
 | Mobile | `shared/realtime` (`walkUpdates`, `useWalkUpdates`) en `useWalk`, `useRoute`, `useWalkAlerts`, `useChat`; `@microsoft/signalr` | `*.test.ts[x]` junto a cada archivo |
 
 ### RF-001 + RF-005 Identidad y login — ✅
-Spec: `waggo-workspace/specs/RF-001-RF-005-identidad-y-login.md` · Decisión: ADR-016 (identidad propia, sin proveedor OAuth externo — resuelve el "pendiente" de ADR-011).
+Spec: `waggo-workspace/specs/RF-001-RF-005-identidad-y-login.md` · Decisión: [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]] (identidad propia) + [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]] (retira el 2FA por correo del login).
 | Capa | Archivos | Pruebas |
 |---|---|---|
-| Domain | `Entities/Identity/{User, LoginChallenge, RefreshToken}`, `IdentityErrors` | `UserTests`, `LoginChallengeTests`, `RefreshTokenTests` |
-| Application | `Identity/Commands/{Register, ConfirmEmail, Login, VerifyLoginCode, RefreshSession}`; puertos `IUserRepository`, `ILoginChallengeRepository`, `IRefreshTokenRepository`, `IPasswordHasher`, `ITokenGenerator`, `ITokenService`, `IEmailSender` | `*HandlerTests` de cada caso de uso |
-| Infrastructure | `BCryptPasswordHasher` (RNF-001), `JwtTokenService` (HS256, RNF-002), `SecureTokenGenerator`, `DevelopmentEmailSender` (log, como `SimulatedPaymentGateway`); `identity.{users, login_challenges, refresh_tokens}` (migraciones `AddUsers`, `AddLoginAndRefreshTokens`) | `BCryptPasswordHasherTests`, `JwtTokenServiceTests`, `SecureTokenGeneratorTests` |
-| Api | `/auth/{register, confirm, login, login/verify, refresh}` (los únicos `AllowAnonymous` de la API); `AddWaggoAuthentication` valida con `IssuerSigningKey` propia, ya no `Authority` externo | `IdentityEndpointTests`, `LoginEndpointTests`, `JwtPipelineTests` (pipeline JWT real de punta a punta) |
-| Mobile | `src/features/auth` (registro, confirmación, login, 2FA); `shared/auth` (sesión, refresh silencioso, almacenamiento seguro con *fallback* a `AsyncStorage` en web — `expo-secure-store` no tiene implementación real ahí); reemplazó `shared/api/devIdentity` (eliminado) | `*.test.ts[x]` junto a cada archivo |
+| Domain | `Entities/Identity/{User, RefreshToken}`, `IdentityErrors` | `UserTests`, `RefreshTokenTests` |
+| Application | `Identity/Commands/{Register, ConfirmEmail, Login, RefreshSession}`; puertos `IUserRepository`, `IRefreshTokenRepository`, `IPasswordHasher`, `ITokenService`, `IEmailSender` | `*HandlerTests` de cada caso de uso |
+| Infrastructure | `BCryptPasswordHasher` (RNF-001), `JwtTokenService` (HS256, RNF-002), `DevelopmentEmailSender` (log, como `SimulatedPaymentGateway`); `identity.{users, refresh_tokens}` (migraciones `AddUsers`, `AddLoginAndRefreshTokens`, `RemoveLoginChallenges`) | `BCryptPasswordHasherTests`, `JwtTokenServiceTests` |
+| Api | `/auth/{register, confirm, login, refresh}` (los únicos `AllowAnonymous` de la API); `AddWaggoAuthentication` valida con `IssuerSigningKey` propia, ya no `Authority` externo | `IdentityEndpointTests`, `LoginEndpointTests`, `JwtPipelineTests` (pipeline JWT real de punta a punta) |
+| Mobile | `src/features/auth` (registro, confirmación, login directo sin pantalla de 2FA); `shared/auth` (sesión, refresh silencioso, almacenamiento seguro con *fallback* a `AsyncStorage` en web — `expo-secure-store` no tiene implementación real ahí); reemplazó `shared/api/devIdentity` (eliminado) | `*.test.ts[x]` junto a cada archivo |
 
 > [!info] Roles
 > Todo `User` confirmado es `owner`; `walker` se añade si tiene un `WalkerProfile` aprobado (RF-002/RF-003); `admin` es una bandera manual sembrada por migración.
 
-### Recuperación de contraseña (RF-001 + RF-005) — ✅ slice TDD
+> [!warning] ADR-017 — solo la mitad ya está implementada
+> Se retiró el 2FA por correo (✅, arriba). La **federación OAuth con Google y Microsoft** que motivó esa misma decisión **no está implementada todavía** en ningún repo (no hay `identity.external_logins`, `ExternalLogin`, ni endpoints `/auth/login/{google,microsoft}`) — spec lista para construir: `waggo-workspace/specs/RF-001-RF-005-login-social-google-microsoft.md` (estado `Lista`).
+
+### Perfil de usuario (nombre y celular) — ✅ slice TDD (parcial)
+Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrador`: cubre ver/editar correo, cambiar contraseña, proveedores vinculados, paseador verificado y eliminar cuenta, además de esto). Este slice (nombre completo y celular) ya se implementó en ambos repos **sin pasar antes por `Lista`** — ver desviación reportada.
+| Capa | Archivos | Pruebas |
+|---|---|---|
+| Application | `Waggo.Application/Identity/Queries/GetMyProfile/`, `Commands/UpdateMyProfile/`; `UserProfileResponse` | `Tests/Waggo.Application.UnitTests/Identity/{Queries/GetMyProfile, Commands/UpdateMyProfile}` |
+| Infrastructure | Migración `AddUserFullNameAndPhone` (`identity.users.{full_name, phone}`) | vía integración |
+| Api | `Waggo.Api/Endpoints/Identity/UsersEndpoints.cs` — `GET/PUT /api/v1/users/me` (cualquier rol autenticado) | pruebas de integración de `Users` |
+| Mobile | `src/features/profile/` — `profileApi` (`getMyProfile`, `updateMyProfile`), `useMyProfile`, `SettingsScreen` (resumen + entrada "Información personal"), `PersonalInfoScreen`, `EditProfileScreen` | `*.test.ts[x]` junto a cada archivo |
+
+### Recuperación de contraseña (RF-001 + RF-005) — 🚧 en progreso
+> [!warning] Aún no está en `main` (2026-10-26)
+> El trabajo existe solo como `git stash` ("WIP feat/password-recovery") en `waggo-api` y `waggo-mobile`; la rama `feat/password-recovery` no tiene commits propios ni PR. La tabla describe el diseño previsto.
+
 Spec: `waggo-workspace/specs/RF-001-RF-005-recuperacion-de-contrasena.md`. Token de un solo uso al correo (1 h, solo el hash en la base); respuesta idéntica exista o no la cuenta; el reset revoca todas las sesiones y limpia el bloqueo.
 | Capa | Archivos | Pruebas |
 |---|---|---|
@@ -183,10 +201,14 @@ Spec: `waggo-workspace/specs/RF-014-notificaciones-del-recorrido.md`. La tabla `
 | `httpClient` (desenvuelve `WaggoApiResponse`) + `ApiError`, `env`, UI base | `waggo-mobile/src/shared/` | — |
 | CI (formato, build, tests, cobertura, docker) | `.github/workflows/ci.yml` en ambos repos | — |
 | Convenciones de código obligatorias (`.editorconfig` estricto, Prettier + ESLint) | `.editorconfig`, `eslint.config.js`, `.prettierrc.json` · [[ADR-008 Convenciones de código obligatorias|ADR-008]] | RNF-011 |
+| Admin real sembrado en Development/Testing (`Seed:Admin`), para probar el login de verdad en vez del bypass de desarrollo | `Waggo.Domain/Entities/Identity/User.Seed`, `Waggo.Infrastructure/{Options,Services}/Identity/{AdminSeedOptions,AdminUserSeeder}` | — |
+| Sistema de diseño "Seashell & Sapphire" — paleta clara por defecto (oscuro vía el selector), Baloo 2 + Inter, radios más redondeados, íconos permitidos — reemplaza el tema oscuro+amarillo+Helvetica | `waggo-mobile/src/shared/ui/theme.ts` (+ `Button`, `_layout.tsx`) · [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]] (reemplaza [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica|ADR-013]]) | — |
+| Navegación por pestañas inferior (dueño `(tabs)`: Inicio · Paseos · Mascotas · Configuración; paseador `(walker-tabs)`: Inicio · Configuración) y componente `Skeleton` compartido reemplazando `ActivityIndicator` en Inicio/Configuración/Mascotas/Paseos, con mensaje de error si falla la carga; "Perfil" se renombra a "Configuración" (`ProfileMenuScreen` → `SettingsScreen`) | `waggo-mobile/src/app/(tabs)/`, `src/app/(walker-tabs)/`, `src/shared/ui/Skeleton.tsx`, `src/features/profile/screens/SettingsScreen.tsx` · [[ADR-019 Navegación por pestañas y estados de carga con skeletons|ADR-019]] | — |
 
 ## Pendiente por RF
 | RF | Módulo | Sprint |
 |---|---|---|
+| RF-001 + RF-005 login social (Google, Microsoft) — spec `Lista`, sin implementar (ADR-017) | `Identity` | 1 |
 | RF-003 (proveedor de verificación, foto y documento escaneado) | `Identity` | 2 |
 | RF-014 push (Expo Push o FCM/APNs; la bandeja ya existe) | `Messaging` | 6 |
 | RF-015 – RF-018 (proveedor real, tarjetas y cuentas de paseadores) | `Payments` | 7 |
@@ -195,6 +217,6 @@ Spec: `waggo-workspace/specs/RF-014-notificaciones-del-recorrido.md`. La tabla `
 ## Deuda técnica conocida
 - [x] `EFCore.NamingConventions` (snake_case) y schema por módulo — aplicado con `Pets` ([[Base de datos - PostgreSQL]]).
 - [x] NetTopologySuite para PostGIS — aplicado con `Walks` (`GeoPointConverter`).
-- [x] Test de arquitectura que impida referencias cruzadas entre módulos — `ModuleTests` con lista explícita ([[ADR-002 Clean Architecture en el backend|ADR-002]]).
-- [x] Umbral de cobertura bloqueante en el backend — Domain + Application ≥ 80 % (`scripts/coverage-gate.sh`).
+- [ ] 🚧 Test de arquitectura que impida referencias cruzadas entre módulos — `ModuleTests` con lista explícita ([[ADR-002 Clean Architecture en el backend|ADR-002]]). En progreso: sin commitear en `.worktrees/api-module-boundaries` (rama `test/module-boundaries`, sin PR).
+- [ ] 🚧 Umbral de cobertura bloqueante en el backend — Domain + Application ≥ 80 % (`scripts/coverage-gate.sh`). En progreso: mismo worktree que `ModuleTests`.
 - [ ] Publicación de imágenes en GHCR (CD-1, ver [[CI-CD]]).

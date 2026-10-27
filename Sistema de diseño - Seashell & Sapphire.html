@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Waggo — Sistema de diseño (Seashell &amp; Sapphire)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  * { box-sizing: border-box; }
+  body{margin:0;font-family:'Inter',sans-serif;background:#FFF0E9;-webkit-font-smoothing:antialiased}
+  button,input{font-family:inherit}
+</style>
+</head>
+<body>
+<div style="width:1440px;max-width:100%;position:relative;box-sizing:border-box;background:#FFF0E9;margin:0 auto;">
+
+<div style="padding:48px;display:flex;flex-direction:column;gap:28px;box-sizing:border-box">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div style="width:64px;height:64px;border-radius:12px;background:#3059A4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="38" height="38" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><circle cx="12" cy="15.5" r="3.6"></circle><circle cx="6" cy="10" r="1.8"></circle><circle cx="9.5" cy="6" r="1.8"></circle><circle cx="14.5" cy="6" r="1.8"></circle><circle cx="18" cy="10" r="1.8"></circle></svg></div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-family:'Baloo 2',sans-serif;font-size:44px;font-weight:800;letter-spacing:-0.02em;color:#16212E;line-height:44px">Waggo</span>
+        <span style="font-size:15px;color:#3A4A5C">Sistema de diseño v1 · Paleta Seashell &amp; Sapphire</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <span style="height:36px;padding:0 14px;border-radius:18px;background:#FFFFFF;border:1px solid #E8D2C3;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#16212E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"></path></svg> Claro</span>
+      <span style="height:36px;padding:0 14px;border-radius:18px;background:#16212E;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#FFF0E9"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"></path></svg> Oscuro</span>
+      <span style="height:36px;padding:0 14px;border-radius:18px;background:#3059A4;display:flex;align-items:center;font-size:13px;font-weight:700;color:#FFFFFF">Baloo 2 / Inter</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+        <span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Primary · Sapphire</span>
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#EBF1FA;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">50</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#EBF1FA</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#CFE0F2;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">100</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#CFE0F2</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#A8C8E6;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">200</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#A8C8E6</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#7CACD8;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">300</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#7CACD8</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#3059A4;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">500</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#3059A4</span></div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#284A87;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">600</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#284A87</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#203A6A;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">700</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#203A6A</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#182B4D;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">800</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#182B4D</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:64px;border-radius:12px;background:#101C33;border:1px solid rgba(22,33,46,.08)"></div><span style="font-size:12px;font-weight:700;color:#16212E">900</span><span style="font-size:11px;color:#3A4A5C;font-family:Menlo,monospace">#101C33</span></div>
+        </div>
+        <span style="font-size:13px;line-height:19px;color:#3A4A5C">500 es el color de acción (botones, enlaces, foco). Sobre fondo claro el texto de acento usa 700 para pasar contraste AA; sobre oscuro se usa 200.</span>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;">
+        <span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Roles · claro / oscuro</span>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"><span style="font-size:11px;font-weight:700;color:#3A4A5C">ROL</span><span style="font-size:11px;font-weight:700;color:#3A4A5C">CLARO</span><span style="font-size:11px;font-weight:700;color:#3A4A5C">OSCURO</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--body-bg</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#FFF0E9;border:1px solid rgba(22,33,46,.15)"></span>#FFF0E9</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#16212E;border:1px solid rgba(22,33,46,.15)"></span>#16212E</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--surface</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#FFFFFF;border:1px solid rgba(22,33,46,.15)"></span>#FFFFFF</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#1C2733;border:1px solid rgba(22,33,46,.15)"></span>#1C2733</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--surface-2</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#FBE2D3;border:1px solid rgba(22,33,46,.15)"></span>#FBE2D3</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#22303E;border:1px solid rgba(22,33,46,.15)"></span>#22303E</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--border-color</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#E8D2C3;border:1px solid rgba(22,33,46,.15)"></span>#E8D2C3</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#2A3B4D;border:1px solid rgba(22,33,46,.15)"></span>#2A3B4D</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--body-color</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#16212E;border:1px solid rgba(22,33,46,.15)"></span>#16212E</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#FFF0E9;border:1px solid rgba(22,33,46,.15)"></span>#FFF0E9</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--text-secondary</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#3A4A5C;border:1px solid rgba(22,33,46,.15)"></span>#3A4A5C</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#8FA5B8;border:1px solid rgba(22,33,46,.15)"></span>#8FA5B8</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--primary</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#3059A4;border:1px solid rgba(22,33,46,.15)"></span>#3059A4</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#5B9BD5;border:1px solid rgba(22,33,46,.15)"></span>#5B9BD5</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--secondary</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#006E87;border:1px solid rgba(22,33,46,.15)"></span>#006E87</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#3FA3BD;border:1px solid rgba(22,33,46,.15)"></span>#3FA3BD</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--info</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#2E9EC4;border:1px solid rgba(22,33,46,.15)"></span>#2E9EC4</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#7FD4EC;border:1px solid rgba(22,33,46,.15)"></span>#7FD4EC</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--warning</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#C97A2B;border:1px solid rgba(22,33,46,.15)"></span>#C97A2B</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#F2A65A;border:1px solid rgba(22,33,46,.15)"></span>#F2A65A</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--success</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#1F7A52;border:1px solid rgba(22,33,46,.15)"></span>#1F7A52</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#4CC38A;border:1px solid rgba(22,33,46,.15)"></span>#4CC38A</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:center;padding:7px 0;border-top:1px solid #E8D2C3"><span style="font-size:13px;font-weight:600;color:#16212E">--danger</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#C23B3B;border:1px solid rgba(22,33,46,.15)"></span>#C23B3B</span><span style="display:flex;align-items:center;gap:8px;font-size:11px;font-family:Menlo,monospace;color:#3A4A5C"><span style="width:22px;height:22px;border-radius:6px;background:#FF7A7A;border:1px solid rgba(22,33,46,.15)"></span>#FF7A7A</span></div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;"><span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Tipografía · Baloo 2 / Inter</span>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Display</span><span style="font-size:11px;color:#3A4A5C">34 / 38 · Baloo 2 Bold</span></span><span style="font-family:'Baloo 2',sans-serif;font-size:34px;font-weight:700;color:#16212E;">Paseos seguros</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Título</span><span style="font-size:11px;color:#3A4A5C">24 / 30 · Baloo 2 Bold</span></span><span style="font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:700;color:#16212E;">Elige paseador</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Encabezado</span><span style="font-size:11px;color:#3A4A5C">18 / 24 · Baloo 2 Bold</span></span><span style="font-family:'Baloo 2',sans-serif;font-size:18px;font-weight:700;color:#16212E;">Nuevo paseo</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Cuerpo</span><span style="font-size:11px;color:#3A4A5C">16 / 24 · Inter Regular</span></span><span style="font-size:16px;font-weight:400;color:#16212E;">Sigue la ruta en vivo.</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Apoyo</span><span style="font-size:11px;color:#3A4A5C">14 / 20 · Inter Regular</span></span><span style="font-size:14px;font-weight:400;color:#3A4A5C;">Llega en 4 minutos</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Etiqueta</span><span style="font-size:11px;color:#3A4A5C">13 / 16 · Inter Bold · MAYÚS</span></span><span style="font-size:13px;font-weight:700;color:#16212E;text-transform:uppercase;letter-spacing:.06em;">TUS PASEADORES</span></div>
+        <div style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-top:1px solid #E8D2C3"><span style="width:150px;flex-shrink:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;font-weight:700;color:#16212E">Micro</span><span style="font-size:11px;color:#3A4A5C">12 / 16 · Inter Medium</span></span><span style="font-size:12px;font-weight:500;color:#3A4A5C;">Solo se cobra al final</span></div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;"><span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Espaciado · base 4</span>
+        <div style="display:flex;gap:14px;align-items:flex-end">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:4px;height:4px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">4</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:8px;height:8px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">8</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:12px;height:12px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">12</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:16px;height:16px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">16</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:20px;height:20px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">20</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:24px;height:24px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">24</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;background:#3059A4;border-radius:3px"></div><span style="font-size:11px;color:#3A4A5C">32</span></div>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;"><span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Radios</span>
+        <div style="display:flex;gap:14px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:52px;height:52px;background:#FBE2D3;border:2px solid #16212E;border-radius:8px"></div><span style="font-size:11px;color:#3A4A5C">8</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:52px;height:52px;background:#FBE2D3;border:2px solid #16212E;border-radius:14px"></div><span style="font-size:11px;color:#3A4A5C">14</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:52px;height:52px;background:#FBE2D3;border:2px solid #16212E;border-radius:20px"></div><span style="font-size:11px;color:#3A4A5C">20</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:52px;height:52px;background:#FBE2D3;border:2px solid #16212E;border-radius:28px"></div><span style="font-size:11px;color:#3A4A5C">28</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:52px;height:52px;background:#FBE2D3;border:2px solid #16212E;border-radius:26px"></div><span style="font-size:11px;color:#3A4A5C">Pill</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;"><span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Componentes</span>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+
+          <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:#FFF0E9">
+            <button type="button" style="width:100%;height:52px;border-radius:26px;background:#3059A4;color:#FFFFFF;border:0;font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="15.5" r="3.6"></circle><circle cx="6" cy="10" r="1.8"></circle><circle cx="9.5" cy="6" r="1.8"></circle><circle cx="14.5" cy="6" r="1.8"></circle><circle cx="18" cy="10" r="1.8"></circle></svg>Pedir paseo</button>
+            <button type="button" style="width:100%;height:52px;border-radius:26px;background:transparent;color:#16212E;border:1.5px solid #16212E;font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0">Ya tengo cuenta</button>
+            <div style="display:flex;gap:8px">
+              <button type="button" style="padding:0 20px;height:44px;border-radius:22px;background:#FBE2D3;color:#16212E;border:0;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>Chat</button>
+              <button type="button" style="padding:0 20px;height:44px;border-radius:22px;background:transparent;color:#C23B3B;border:1.5px solid #C23B3B;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0">Cancelar</button>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" style="height:36px;padding:0 14px;border-radius:18px;background:#16212E;color:#FFF0E9;border:1px solid #16212E;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0">Recomendados</button>
+              <button type="button" style="height:36px;padding:0 14px;border-radius:18px;background:#FFFFFF;color:#16212E;border:1px solid #E8D2C3;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0">Más cerca</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="dsin-l" style="font-size:13px;font-weight:700;color:#16212E">Dirección de recogida</label>
+              <input id="dsin-l" value="Cra. 11 # 93-40" style="height:48px;border-radius:14px;border:1.5px solid #16212E;padding:0 14px;font-size:15px;color:#16212E;background:#FFFFFF;box-sizing:border-box">
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:#16212E">
+            <button type="button" style="width:100%;height:52px;border-radius:26px;background:#5B9BD5;color:#16212E;border:0;font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="15.5" r="3.6"></circle><circle cx="6" cy="10" r="1.8"></circle><circle cx="9.5" cy="6" r="1.8"></circle><circle cx="14.5" cy="6" r="1.8"></circle><circle cx="18" cy="10" r="1.8"></circle></svg>Pedir paseo</button>
+            <button type="button" style="width:100%;height:52px;border-radius:26px;background:transparent;color:#FFF0E9;border:1.5px solid #2A3B4D;font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0">Ya tengo cuenta</button>
+            <div style="display:flex;gap:8px">
+              <button type="button" style="padding:0 20px;height:44px;border-radius:22px;background:#22303E;color:#FFF0E9;border:0;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>Chat</button>
+              <button type="button" style="padding:0 20px;height:44px;border-radius:22px;background:transparent;color:#FF7A7A;border:1.5px solid #FF7A7A;font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;box-sizing:border-box;flex-shrink:0">Cancelar</button>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" style="height:36px;padding:0 14px;border-radius:18px;background:#FFF0E9;color:#16212E;border:1px solid #FFF0E9;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0">Recomendados</button>
+              <button type="button" style="height:36px;padding:0 14px;border-radius:18px;background:#1C2733;color:#FFF0E9;border:1px solid #2A3B4D;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0">Más cerca</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;border-radius:14px;background:#1C2733;border:1px solid #2A3B4D">
+              <span style="width:10px;height:10px;border-radius:50%;background:#4CC38A"></span><span style="font-size:14px;font-weight:700;color:#FFF0E9">Paseo en curso · 21 min</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E8D2C3;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box;"><span style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#203A6A">Principios UX</span>
+        <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #E8D2C3"><span style="width:28px;height:28px;border-radius:8px;background:#3059A4;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;color:#16212E">Confianza visible</span><span style="font-size:13px;line-height:19px;color:#3A4A5C">Verificación, código de entrega y ruta en vivo siempre a la vista. La seguridad es la propuesta de valor.</span></span></div>
+        <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #E8D2C3"><span style="width:28px;height:28px;border-radius:8px;background:#3059A4;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;color:#16212E">Una acción principal</span><span style="font-size:13px;line-height:19px;color:#3A4A5C">Cada pantalla tiene un solo botón primary. Si hay dos, uno sobra.</span></span></div>
+        <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #E8D2C3"><span style="width:28px;height:28px;border-radius:8px;background:#3059A4;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;color:#16212E">Estado siempre claro</span><span style="font-size:13px;line-height:19px;color:#3A4A5C">El usuario sabe en todo momento en qué punto del paseo está su perro.</span></span></div>
+        <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #E8D2C3"><span style="width:28px;height:28px;border-radius:8px;background:#3059A4;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;color:#16212E">Pulgar primero</span><span style="font-size:13px;line-height:19px;color:#3A4A5C">Acciones críticas en el tercio inferior; hojas deslizables sobre el mapa.</span></span></div>
+        <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #E8D2C3"><span style="width:28px;height:28px;border-radius:8px;background:#3059A4;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</span><span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:15px;font-weight:800;color:#16212E">Accesible por defecto</span><span style="font-size:13px;line-height:19px;color:#3A4A5C">Contraste AA, objetivos de 44 px, primary nunca como texto de cuerpo sobre fondo claro.</span></span></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+</body>
+</html>

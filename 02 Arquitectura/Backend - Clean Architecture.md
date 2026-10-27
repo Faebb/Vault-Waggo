@@ -30,10 +30,10 @@ Para cumplir [[Requerimientos no funcionales|RNF-009]] sin la complejidad de un 
 | Módulo | RF | Estado |
 |---|---|---|
 | `Pricing` | RF-018, RF-019 | ✅ Slice de ejemplo implementado con TDD |
-| `Identity` | RF-001, RF-002, RF-003, RF-005 | 🟡 Cuenta, 2FA y recuperación de contraseña ✅; verificación de paseadores manual (falta el proveedor) |
+| `Identity` | RF-001, RF-002, RF-003, RF-005 | 🟡 Cuenta (login sin 2FA, [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]]) y perfil propio (nombre/celular) ✅; recuperación de contraseña 🚧 en progreso (sin mergear); verificación de paseadores manual (falta el proveedor); login social Google/Microsoft pendiente |
 | `Pets` | RF-004 | ✅ |
 | `Walks` | RF-006, RF-007 | ✅ |
-| `Tracking` | RF-008 – RF-012 | ✅ en vivo con SignalR (`/hubs/walks`), polling de respaldo |
+| `Tracking` | RF-008 – RF-012 | ✅ por polling; en vivo con SignalR (`/hubs/walks`) 🚧 en progreso (sin mergear) |
 | `Messaging` | RF-013, RF-014 | 🟡 Chat (RF-013) y bandeja de avisos (RF-014); falta push |
 | `Payments` | RF-015 – RF-018 | 🟡 Con pasarela simulada ([[ADR-014 Pasarela de pagos detrás de un puerto|ADR-014]]) |
 | `Analytics` | RF-021 | Pendiente |
@@ -70,7 +70,7 @@ sequenceDiagram
 ## Seguridad
 - **JWT Bearer** (RNF-002): access token de vida corta + refresh token rotativo guardado hasheado.
 - **bcrypt** para contraseñas (RNF-001) detrás de `IPasswordHasher`.
-- **2FA** (RF-005): TOTP o código por SMS/correo.
+- Sin segundo factor obligatorio para correo+contraseña ([[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]], RF-005); se retiró el 2FA por correo que tenía antes. Login social (Google/Microsoft) de la misma decisión, pendiente de implementar.
 - Autorización por roles con `WaggoPolicies.Owner`, `Walker` y `Admin` ([[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]).
 - Datos sensibles cifrados a nivel de columna (RNF-003).
 

@@ -29,14 +29,16 @@ waggo-mobile/
 │  │  ├─ _layout.tsx          # gatekeeper: sin sesión → redirige a /login (excepto rutas públicas)
 │  │  ├─ index.tsx            # "/" → bienvenida (UX-001), sin encabezado; "Empezar" lleva a /inicio
 │  │  ├─ registro.tsx         # "/registro", confirmar.tsx "/confirmar" (RF-001)
-│  │  ├─ login.tsx            # "/login", verificar.tsx "/verificar" (2FA) (RF-005)
-│  │  ├─ inicio.tsx           # "/inicio" → inicio del dueño (RF-007)
-│  │  ├─ paseos/              # "/paseos", "/paseos/nuevo", "/paseos/[id]" (RF-007)
-│  │  ├─ mascotas/            # "/mascotas", "/mascotas/nueva" (RF-004)
-│  │  ├─ paseador/            # "/paseador", "/paseador/[id]" (RF-007, rol walker)
+│  │  ├─ login.tsx            # "/login" — entra directo a sesión, sin pantalla de 2FA (ADR-017) (RF-005)
+│  │  ├─ (tabs)/               # Barra de pestañas del dueño (ADR-019): inicio, paseos/, mascotas/, configuracion/
+│  │  ├─ (walker-tabs)/        # Barra de pestañas del paseador (ADR-019): paseador/index, paseador/configuracion
+│  │  ├─ paseos/               # Detalle, empujado sobre las pestañas: "/paseos/nuevo", "/paseos/[id]" (RF-007)
+│  │  ├─ mascotas/             # Detalle: "/mascotas/nueva" (RF-004)
+│  │  ├─ paseador/             # Detalle del paseador: "/paseador/[id]" (RF-007, rol walker)
+│  │  ├─ admin/                # "/admin" → cola de verificación de paseadores, solo rol admin (RF-002/RF-003)
 │  │  └─ cotizar.tsx          # "/cotizar" → cotizador de tarifa (RF-019)
 │  ├─ features/               # Un folder por módulo de negocio (espejo de los módulos del backend)
-│  │  ├─ auth/                # Registro, confirmación por correo, login, 2FA (RF-001, RF-005)
+│  │  ├─ auth/                # Registro, confirmación por correo, login directo sin 2FA (ADR-017) (RF-001, RF-005)
 │  │  ├─ onboarding/          # Bienvenida: sin API, solo screens/components/model (UX-001)
 │  │  ├─ home/                # Inicio del dueño estilo Uber (compone pets + walks por su index)
 │  │  ├─ pets/                # Mis perros y agregar perro (RF-004)
@@ -44,6 +46,8 @@ waggo-mobile/
 │  │  ├─ walker/              # Lado del paseador: solicitudes cercanas, aceptar, iniciar/terminar (RF-007, RF-008)
 │  │  ├─ tracking/            # Ruta en vivo (SVG), métricas, envío de la posición y emergencias (RF-008, RF-011, RF-012)
 │  │  ├─ messaging/           # Chat del paseo (RF-013)
+│  │  ├─ profile/             # Configuración: resumen de cuenta, "Información personal" (nombre/celular), tema, cerrar sesión
+│  │  ├─ admin/               # Cola de verificación de paseadores: aprobar/rechazar (RF-002/RF-003)
 │  │  └─ pricing/
 │  │     ├─ api/              # llamadas HTTP + esquemas Zod
 │  │     ├─ hooks/            # hooks de TanStack Query
@@ -56,7 +60,7 @@ waggo-mobile/
 │  │  ├─ auth/              # session.ts (estado de sesión), secureStorage.ts (SecureStore con fallback a AsyncStorage en web), useHydrateSession.ts
 │  │  ├─ config/env.ts
 │  │  ├─ realtime/         # walkUpdates.ts (una conexión SignalR para la app), useWalkUpdates.ts
-│  │  └─ ui/               # Button, ChipGroup, theme (colors, fontFamily, typography, spacing, radius)
+│  │  └─ ui/               # Button, ChipGroup, Skeleton (ADR-019, placeholders de carga), theme (colors, fontFamily, typography, spacing, radius)
 │  └─ test/                   # utilidades de prueba (render con providers)
 ├─ Dockerfile                 # build web (expo export) servido con nginx
 └─ .github/workflows/ci.yml
@@ -88,14 +92,18 @@ flowchart LR
 ```
 
 ## Diseño visual
-Decisión: [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica]].
-- **Mobile first**: columna de máximo 480 px en tablet y web, con la acción principal abajo.
-- **Tema oscuro** con **amarillo `#FFC527`** como único acento y **Helvetica** (`fontFamily` en `theme.ts`; en Android, la sans del sistema).
-- Estilo suizo: titulares grandes a la izquierda, listas numeradas con separadores finos, sin emojis.
-- Las pantallas solo usan tokens de `src/shared/ui/theme.ts`: `colors`, `typography`, `spacing`, `radius`.
+Decisión: [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]] (reemplaza [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica|ADR-013]]).
+- **Mobile first**: columna de máximo 480 px en tablet y web, con la acción principal abajo (sin cambios).
+- **Tema claro por defecto** (crema `#FFF0E9`), oscuro disponible por el selector ([[ADR-015 Selector de tema claro-oscuro|ADR-015]]). Acento **zafiro** (`colors.primary`): tono distinto por tema para contraste AA, no un único hex como antes.
+- **Baloo 2** (títulos, encabezados, botones) + **Inter** (cuerpo, etiquetas, micro), cargadas con `useFonts` en `_layout.tsx`. Ya no es Helvetica.
+- Esquinas más redondeadas (radios 8/14/20/pill); íconos de línea permitidos (ya no "estilo suizo sin íconos").
+- Las pantallas solo usan tokens de `src/shared/ui/theme.ts`: `colors`, `typography`, `spacing`, `radius` — por eso el cambio de paleta no tocó pantalla por pantalla.
+
+## Navegación
+Decisión: [[ADR-019 Navegación por pestañas y estados de carga con skeletons|ADR-019]]. Barra de pestañas inferior por rol (`(tabs)` dueño, `(walker-tabs)` paseador) con las pantallas de detalle empujadas sobre ella desde el `Stack` raíz; estados de carga con el componente `Skeleton` en vez de `ActivityIndicator`.
 
 ## Identidad y sesión
-Login real desde RF-001+RF-005 ([[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]], reemplaza la identidad de desarrollo de [[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]). `shared/auth/session.ts` guarda `{ accessToken, refreshToken, expiresAt }` en un módulo con `Set<listener>` (mismo patrón que `theme.ts`); `useHydrateSession` lo restaura al abrir la app desde `secureStorage` (`expo-secure-store`, con *fallback* a `AsyncStorage` en web — `expo-secure-store` no tiene implementación real ahí). `httpClient` agrega `Authorization: Bearer <accessToken>` y, ante un 401, intenta un refresh silencioso y reintenta una vez. `_layout.tsx` redirige a `/login` si no hay sesión, salvo en las rutas públicas (bienvenida, registro, confirmación, login, verificación).
+Login real desde RF-001+RF-005 ([[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]], reemplaza la identidad de desarrollo de [[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]). `shared/auth/session.ts` guarda `{ accessToken, refreshToken, expiresAt }` en un módulo con `Set<listener>` (mismo patrón que `theme.ts`); `useHydrateSession` lo restaura al abrir la app desde `secureStorage` (`expo-secure-store`, con *fallback* a `AsyncStorage` en web — `expo-secure-store` no tiene implementación real ahí). `httpClient` agrega `Authorization: Bearer <accessToken>` y, ante un 401, intenta un refresh silencioso y reintenta una vez. `_layout.tsx` redirige a `/login` si no hay sesión, salvo en las rutas públicas (bienvenida, registro, confirmación, login — sin paso de verificación por 2FA desde ADR-017).
 
 ## Configuración
 - `EXPO_PUBLIC_API_URL` define la URL de la API (ver `.env.example`).

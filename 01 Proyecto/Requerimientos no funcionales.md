@@ -17,7 +17,7 @@ Volver a [[00 - MOC Waggo]]
 | RNF-004 | Seguridad / Cumplimiento | No almacenar tarjetas | Alta | Solo tokens de la pasarela; **test de arquitectura** prohíbe entidades con campos tipo `CardNumber`. |
 | RNF-005 | Cumplimiento | GDPR / Ley 1581 de 2012 (Colombia) | Alta | Consentimiento explícito, borrado/anonimización, minimización de datos. |
 | RNF-006 | Rendimiento | 500 usuarios / 50 paseadores (piloto) | Alta | Pruebas de carga con k6 antes del lanzamiento. |
-| RNF-007 | Rendimiento | Picos concurrentes y GPS sin caídas | Alta | SignalR para tracking (✅ `/hubs/walks`), ingesta de posiciones por lotes, PostGIS con índices GiST. Al escalar a varias instancias hará falta un *backplane* (Redis). |
+| RNF-007 | Rendimiento | Picos concurrentes y GPS sin caídas | Alta | SignalR para tracking (🚧 `/hubs/walks` en progreso, sin mergear; hoy polling), ingesta de posiciones por lotes, PostGIS con índices GiST. Al escalar a varias instancias hará falta un *backplane* (Redis). |
 | RNF-008 | Disponibilidad | Alta disponibilidad GPS, pagos, push | Alta | Contenedores sin estado, health checks, reintentos (Polly / `Microsoft.Extensions.Http.Resilience`), outbox para eventos. |
 | RNF-009 | Arquitectura | Monolito modular migrable a microservicios | Media | Clean Architecture con **carpetas por módulo** dentro de cada capa. Ver [[ADR-002 Clean Architecture en el backend]]. |
 | RNF-010 | Portabilidad | iOS y Android | Media | Expo + React Native (también exporta Web). Ver [[ADR-003 Expo y TypeScript]]. |

@@ -20,7 +20,7 @@ Clean Architecture clásica con 4 proyectos (`Domain`, `Application`, `Infrastru
 ## Consecuencias
 - ✅ Estructura conocida y documentada; curva de aprendizaje baja.
 - ✅ El dominio queda aislado y 100 % testeable sin infraestructura (ideal para TDD).
-- ⚠️ Menos aislamiento entre módulos que un monolito modular: se mitiga con carpetas/namespaces por módulo y con `Tests/Waggo.ArchitectureTests/ModuleTests.cs`, que solo permite las dependencias entre módulos de una lista explícita. Una dependencia nueva rompe el build hasta agregarla a la lista y justificarla aquí.
+- ⚠️ Menos aislamiento entre módulos que un monolito modular: se mitiga con carpetas/namespaces por módulo y, cuando se mergee (🚧 en progreso, sin mergear), con `Tests/Waggo.ArchitectureTests/ModuleTests.cs`, que solo permitirá las dependencias entre módulos de una lista explícita. Con él, una dependencia nueva romperá el build hasta agregarla a la lista y justificarla aquí.
 
 ### Dependencias permitidas entre módulos (2026-10-20)
 | Módulo | Puede usar | Por qué |

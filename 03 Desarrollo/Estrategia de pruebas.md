@@ -45,7 +45,7 @@ flowchart TB
 |---|---|
 | Domain + Application | 80 % líneas |
 | Mobile (global, `src/**` sin `app/`, `index.ts` ni `test/`) | 80 % líneas y funciones · 70 % ramas — **bloquea** (`coverageThreshold` en `package.json`) |
-| Domain + Application (backend) | 80 % líneas — **bloquea** en CI (`scripts/coverage-gate.sh`, unitarias + integración, unidas con ReportGenerator) |
+| Domain + Application (backend) | 80 % líneas — 🚧 en progreso: bloqueará en CI con `scripts/coverage-gate.sh` (unitarias + integración, unidas con ReportGenerator), aún sin mergear; hoy solo se reporta |
 | Backend global (sin migraciones ni código generado) | Se reporta (artefacto `coverage` en CI), no bloquea |
 
 ## Qué NO probar

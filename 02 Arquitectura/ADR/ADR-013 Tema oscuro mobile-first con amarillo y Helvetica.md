@@ -1,7 +1,7 @@
 ---
 title: ADR-013 Tema oscuro mobile-first con amarillo y Helvetica
 tags: [waggo, adr, frontend, diseño]
-status: Aceptada
+status: Superada
 date: 2026-09-30
 ---
 
@@ -9,7 +9,10 @@ date: 2026-09-30
 
 Volver a [[00 - MOC Waggo]] · Guía: [[Frontend - Expo feature-based]]
 
-> [!info] Estado: **Aceptada** · 2026-09-30 · Decidida por el equipo al revisar la primera versión de UX-001
+> [!warning] Estado: **Superada por [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]]** · 2026-10-24
+> Paleta, tipografía, radios e íconos de esta nota ya no aplican (nueva paleta "Seashell & Sapphire", Baloo 2 + Inter, tema claro por defecto). El principio de mobile first y "solo tokens de `theme.ts`" sigue vigente bajo la paleta nueva. Se deja esta nota como registro histórico de la decisión original.
+
+> [!info] Estado original: **Aceptada** · 2026-09-30 · Decidida por el equipo al revisar la primera versión de UX-001
 
 ## Contexto
 La primera versión de la bienvenida (UX-001) usaba fondo claro, verde, emojis como íconos y tarjetas centradas. Se veía genérica, "hecha con IA", y no transmitía una identidad propia. La app se usa sobre todo en el celular, en la calle y con una mano.
