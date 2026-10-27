@@ -19,16 +19,16 @@ Antes de ADR-016/RF-001+RF-005 no existía una cuenta real que "configurar" — 
 
 ### Qué se quiere
 - [x] Ver y editar nombre completo y celular — implementado (`GET/PUT /api/v1/users/me`, pantalla "Información personal" dentro de Configuración); ver [[Estado de implementación]].
-- Ver y editar el correo de la cuenta.
-- Cambiar contraseña (reutiliza `PasswordPolicy` de la recuperación de contraseña).
+- [x] Cambiar el correo de la cuenta — implementado (código al correo nuevo y aviso al anterior); ver [[Estado de implementación]].
+- [x] Cambiar contraseña — implementado, junto con "olvidé mi contraseña".
 - Ver qué proveedores tiene vinculados a la cuenta (correo siempre; Google/Microsoft una vez exista esa spec) y poder desvincular uno si hay más de un método de entrada.
 - Ver si es un paseador verificado (hoy no hay ningún indicador de esto en la app; `WalkerGate` lo sabe pero no se muestra en ningún otro lado).
-- Cerrar sesión.
+- [x] Cerrar sesión — implementado (revoca el refresh token en la API).
 - Eliminar la cuenta (RNF de privacidad / buena práctica — pendiente definir qué pasa con paseos históricos, pagos y mascotas al eliminarla).
 
 ### Preguntas abiertas
 - [ ] ¿Eliminar cuenta es borrado real o desactivación (soft delete)? Afecta paseos/pagos históricos.
-- [ ] ¿Se puede cambiar el correo libremente o requiere reconfirmación (como el registro)?
+- [x] ¿Se puede cambiar el correo libremente o requiere reconfirmación? — Requiere un código enviado al correo nuevo (decidido 2026-10-27).
 - [ ] ¿Desvincular un proveedor social requiere que quede al menos un método de entrada activo?
 
 ## 2. Panel de administración
