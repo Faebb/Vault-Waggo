@@ -87,6 +87,22 @@ throw new NotFoundException(WalkErrors.NotFound, $"Walk {walkId} not found");
 - Los casos de uso obtienen al usuario con `ICurrentUser` (Application), que la API implementa con `HttpCurrentUser` a partir del claim `sub` (o el id del usuario de desarrollo).
 - La API **se niega a arrancar** si el usuario de desarrollo está activo en Production, o si no hay `SigningKey` y el usuario de desarrollo está apagado.
 
+### Usuarios de prueba (solo Development y Testing)
+> [!warning] 🚧 En progreso (DEV-001, rama `feat/dev-seed-users`, PR api#21 + workspace#22, sin mergear). En `main` solo existe el admin (`Seed:Admin`).
+
+Para probar cada rol con el login real (`POST /auth/login`) sin registrarse ni aprobar a nadie a mano, la API crea al arrancar, después de las migraciones, estas cuentas ya confirmadas (spec `waggo-workspace/specs/DEV-001-usuarios-de-prueba.md`):
+
+| Rol | Correo | Contraseña | Nombre completo | Celular |
+|---|---|---|---|---|
+| `admin` (+ `owner`) | `admin@waggo.local` | `Admin1234` | Administrador Waggo | 3000000001 |
+| `owner` | `dueno@waggo.local` | `Dueno1234` | Laura Gómez | 3000000002 |
+| `walker` (+ `owner`) | `paseador@waggo.local` | `Paseador1234` | Carlos Ramírez | 3000000003 |
+
+- El paseador tiene un `WalkerProfile` **aprobado** (CC `1000000003`, revisor `seed`), así que su sesión trae el rol `walker`.
+- Se configuran en `Seed:Users:{Admin,Owner,Walker}` de `appsettings.Development.json` (la fábrica de pruebas de integración usa las mismas). Una cuenta sin correo o contraseña se omite.
+- Idempotente: si la cuenta o el perfil ya existen, no se tocan (tampoco la contraseña).
+- **Nunca en producción**: `DevelopmentUsersSeeder` solo se ejecuta si el ambiente es `Development` o `Testing`, y `ProductionSettingsTests` falla si `appsettings.json` (el que leen los demás ambientes) llega a tener la sección `Seed`.
+
 ## Rate limiting
 - Ventana fija por usuario (o IP): `RateLimiting:PermitLimit` (100) por `RateLimiting:WindowSeconds` (60).
 - Al superarlo: HTTP 429 con `Http.TooManyRequests` ("Espera un momento e intenta de nuevo").
