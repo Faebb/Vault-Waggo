@@ -88,7 +88,7 @@ throw new NotFoundException(WalkErrors.NotFound, $"Walk {walkId} not found");
 - La API **se niega a arrancar** si el usuario de desarrollo está activo en Production, o si no hay `SigningKey` y el usuario de desarrollo está apagado.
 
 ### Usuarios de prueba (solo Development y Testing)
-> [!warning] 🚧 En progreso (DEV-001, rama `feat/dev-seed-users`, PR api#21 + workspace#22, sin mergear). En `main` solo existe el admin (`Seed:Admin`).
+> [!info] DEV-001 · PR api#21 + workspace#22, mergeados a `main` el 2026-10-26. Reemplaza el admin único `Seed:Admin`.
 
 Para probar cada rol con el login real (`POST /auth/login`) sin registrarse ni aprobar a nadie a mano, la API crea al arrancar, después de las migraciones, estas cuentas ya confirmadas (spec `waggo-workspace/specs/DEV-001-usuarios-de-prueba.md`):
 
