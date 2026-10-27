@@ -36,6 +36,7 @@ created: 2026-09-26
 - [[Convenciones de Git y ramas]]
 - [[Definition of Done]]
 - [[CI-CD]]
+- [[Guía AWS SES - prompt de configuración]] — prompt para configurar el envío real de correos con Amazon SES
 
 ## 4. Planeación
 - [[Roadmap MVP]]
