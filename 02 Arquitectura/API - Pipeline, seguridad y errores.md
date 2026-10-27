@@ -77,7 +77,7 @@ throw new NotFoundException(WalkErrors.NotFound, $"Walk {walkId} not found");
 ## Autenticación y autorización
 - **JWT propio**: la API emite y valida sus propios access tokens JWT (HS256, `Authentication:Jwt:SigningKey`/`Issuer`), sin proveedor OAuth externo — decisión [[ADR-016 Identidad propia con bcrypt y JWT emitido por la API|ADR-016]], que resuelve el "pendiente de proveedor" de [[ADR-011 Autenticación OAuth 2.0 con roles|ADR-011]]. Login directo (sin 2FA, [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]]) y refresh rotativo: ver `RF-001-RF-005-identidad-y-login` en [[Estado de implementación]]. Login social (Google/Microsoft) de ADR-017 todavía no está implementado.
 - **Roles**: `owner`, `walker`, `admin` (`WaggoRoles`). Políticas: `WaggoPolicies.Owner` (owner o admin), `Walker` (walker o admin), `Admin`.
-- **Seguro por defecto**: todo endpoint exige usuario autenticado salvo que diga `AllowAnonymous` (`/auth/{register,confirm,login,refresh}`, health checks, OpenAPI en desarrollo).
+- **Seguro por defecto**: todo endpoint exige usuario autenticado salvo que diga `AllowAnonymous` (`/auth/{register,confirm,resend-confirmation,login,refresh,logout,forgot-password,reset-password}`, health checks, OpenAPI en desarrollo).
 - En cada endpoint: `.RequireAuthorization(WaggoPolicies.Owner)`.
 
 ### Desarrollo sin autenticación (solo pruebas de integración)

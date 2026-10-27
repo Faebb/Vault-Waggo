@@ -131,6 +131,9 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-identidad-y-login.md` · Decisión: [
 | Api | `/auth/{register, confirm, login, refresh}` (los únicos `AllowAnonymous` de la API); `AddWaggoAuthentication` valida con `IssuerSigningKey` propia, ya no `Authority` externo | `IdentityEndpointTests`, `LoginEndpointTests`, `JwtPipelineTests` (pipeline JWT real de punta a punta) |
 | Mobile | `src/features/auth` (registro, confirmación, login directo sin pantalla de 2FA); `shared/auth` (sesión, refresh silencioso, almacenamiento seguro con *fallback* a `AsyncStorage` en web — `expo-secure-store` no tiene implementación real ahí); reemplazó `shared/api/devIdentity` (eliminado) | `*.test.ts[x]` junto a cada archivo |
 
+> [!info] Rutas posteriores
+> Además de `/auth/{register, confirm, login, refresh}`: `/auth/{resend-confirmation, forgot-password, reset-password, logout}` y `/users/me/{password, email, email/confirm}` — ver [[#Recuperación y seguridad de la cuenta (RF-001 + RF-005) — ✅ 5 slices TDD]].
+
 > [!info] Roles
 > Todo `User` confirmado es `owner`; `walker` se añade si tiene un `WalkerProfile` aprobado (RF-002/RF-003); `admin` es una bandera manual sembrada por migración.
 
@@ -138,25 +141,13 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-identidad-y-login.md` · Decisión: [
 > Se retiró el 2FA por correo (✅, arriba). La **federación OAuth con Google y Microsoft** que motivó esa misma decisión **no está implementada todavía** en ningún repo (no hay `identity.external_logins`, `ExternalLogin`, ni endpoints `/auth/login/{google,microsoft}`) — spec lista para construir: `waggo-workspace/specs/RF-001-RF-005-login-social-google-microsoft.md` (estado `Lista`).
 
 ### Perfil de usuario (nombre y celular) — ✅ slice TDD (parcial)
-Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrador`: cubre ver/editar correo, cambiar contraseña, proveedores vinculados, paseador verificado y eliminar cuenta, además de esto). Este slice (nombre completo y celular) ya se implementó en ambos repos **sin pasar antes por `Lista`** — ver desviación reportada.
+Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrador`: lo que falta es proveedores vinculados, paseador verificado y eliminar cuenta; cambiar contraseña, cambiar correo y cerrar sesión ya están en la spec de seguridad de la cuenta). Este slice (nombre completo y celular) ya se implementó en ambos repos **sin pasar antes por `Lista`** — ver desviación reportada.
 | Capa | Archivos | Pruebas |
 |---|---|---|
 | Application | `Waggo.Application/Identity/Queries/GetMyProfile/`, `Commands/UpdateMyProfile/`; `UserProfileResponse` | `Tests/Waggo.Application.UnitTests/Identity/{Queries/GetMyProfile, Commands/UpdateMyProfile}` |
 | Infrastructure | Migración `AddUserFullNameAndPhone` (`identity.users.{full_name, phone}`) | vía integración |
 | Api | `Waggo.Api/Endpoints/Identity/UsersEndpoints.cs` — `GET/PUT /api/v1/users/me` (cualquier rol autenticado) | pruebas de integración de `Users` |
 | Mobile | `src/features/profile/` — `profileApi` (`getMyProfile`, `updateMyProfile`), `useMyProfile`, `SettingsScreen` (resumen + entrada "Información personal"), `PersonalInfoScreen`, `EditProfileScreen` | `*.test.ts[x]` junto a cada archivo |
-
-### Recuperación de contraseña (RF-001 + RF-005) — 🚧 en progreso
-> [!warning] Aún no está en `main` (2026-10-26)
-> El trabajo existe solo como `git stash` ("WIP feat/password-recovery") en `waggo-api` y `waggo-mobile`; la rama `feat/password-recovery` no tiene commits propios ni PR. La tabla describe el diseño previsto.
-
-Spec: `waggo-workspace/specs/RF-001-RF-005-recuperacion-de-contrasena.md`. Token de un solo uso al correo (1 h, solo el hash en la base); respuesta idéntica exista o no la cuenta; el reset revoca todas las sesiones y limpia el bloqueo.
-| Capa | Archivos | Pruebas |
-|---|---|---|
-| Domain | `User.RequestPasswordReset`, `User.ResetPassword`; `IdentityErrors.{ResetTokenInvalid, ResetTokenExpired}` | `UserTests` |
-| Application | `Identity/Commands/{ForgotPassword, ResetPassword}`, `Identity/PasswordPolicy` (compartida con el registro) | `ForgotPasswordHandlerTests`, `ResetPasswordHandlerTests` |
-| Infrastructure / Api | columnas `password_reset_token_{hash,expires_at}` en `identity.users` (migración `AddPasswordReset`); `POST /auth/password/forgot`, `POST /auth/password/reset` (`AllowAnonymous`) | `PasswordResetEndpointTests`, validadores DTO |
-| Mobile | `src/features/auth` — `ForgotPasswordScreen` (`/olvide-contrasena`), `ResetPasswordScreen` (`/restablecer`), enlace en `LoginScreen` | `*.test.ts[x]` junto a cada archivo |
 
 ### RF-002 + RF-003 Paseadores verificados — ✅ slice TDD (verificación manual)
 Spec: `waggo-workspace/specs/RF-002-RF-003-paseadores-verificados.md`. Mientras se elige el proveedor de identidad y antecedentes, un administrador aprueba o rechaza. Foto y documento escaneado quedan para un slice con almacenamiento de archivos.
@@ -185,9 +176,9 @@ Spec: `waggo-workspace/specs/RF-014-notificaciones-del-recorrido.md`. La tabla `
 | Infrastructure / Api | `messaging.notifications` (migración `AddNotifications`); `GET /notifications`, `POST /notifications/read` | `NotificationEndpointTests` |
 | Mobile | `src/features/notifications` — `NotificationBell` y `NotificationsScreen` | `*.test.ts[x]` junto a cada archivo |
 
-### Correos reales (Amazon SES) y código de 6 dígitos (RF-001 + RF-005) — 🚧 en progreso
-> [!warning] Aún no está en `main` (2026-10-26)
-> PRs abiertos: `waggo-api#22` (envío con SES), `waggo-api#23` (código de 6 dígitos y reenvío, apilado sobre #22), `waggo-mobile#22` (pantalla del código) y `waggo-workspace#23` (spec). Hasta que se mergeen, en `main` el correo de confirmación solo se escribe en el log y la confirmación usa un token largo con `GET /auth/confirm?token=`.
+### Correos reales (Amazon SES) y código de 6 dígitos (RF-001 + RF-005) — ✅
+> [!success] En `main` (2026-10-27)
+> Mergeados `waggo-api#22` (envío con SES), `waggo-api#23` (código de 6 dígitos y reenvío), `waggo-mobile#22` y `waggo-workspace#23` (spec). Probado con SES real en *sandbox*: llegó el correo con el código y `POST /auth/confirm` lo aceptó.
 
 Spec: `waggo-workspace/specs/RF-001-RF-005-envio-de-correos-reales.md` · Configuración de AWS: [[Guía AWS SES - prompt de configuración]]. El correo sale por Amazon SES (`us-east-1`) detrás de `IEmailSender`; la confirmación pasa a un código de 6 dígitos que vence a los 30 min, se invalida tras 5 intentos fallidos y se puede reenviar (espera de 60 s). Cambia el contrato: `POST /auth/confirm {email, code}` reemplaza al `GET` y aparece `POST /auth/resend-confirmation {email}`.
 | Capa | Archivos | Pruebas |
@@ -197,8 +188,24 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-envio-de-correos-reales.md` · Config
 | Application / Domain | `User` (`ConfirmationAttempts`, `Confirm`, `TryIssueConfirmationCode`), `ConfirmEmail*`, `ResendConfirmation/*`, `ConfirmationEmail`, `ITokenGenerator.GenerateNumericCode`, `EmailErrors.SendFailed`, `IdentityErrors.ConfirmationAttemptsExceeded`; `RegisterHandler` envía antes de guardar; migración `AddConfirmationAttempts` | `UserTests`, `ConfirmEmailHandlerTests`, `ResendConfirmationHandlerTests`, `RegisterHandlerTests`, `SecureTokenGeneratorTests` |
 | Mobile | `src/features/auth` — `authApi` (`confirmEmail(email, code)`, `resendConfirmation`), `useAuth`, `ConfirmScreen` (código de 6 dígitos y "Reenviar código" con cuenta regresiva de 60 s) | `authApi.test.ts`, `ConfirmScreen.test.tsx` |
 
-> [!info] Pendiente de este slice
-> Prueba manual con SES real en *sandbox*, registrar el dominio y salir del sandbox (para escribirle a cualquier persona), configuration set con SNS para rebotes y quejas, y el correo de recuperación de contraseña (reutilizará `IEmailSender`).
+> [!info] Pendiente de este slice (operativo, no de código)
+> Registrar el dominio y salir del *sandbox* de SES (hoy solo se puede escribir a correos verificados), y un configuration set con SNS para rebotes y quejas. El correo de recuperación de contraseña ya existe, ver la sección siguiente.
+
+### Recuperación y seguridad de la cuenta (RF-001 + RF-005) — ✅ 5 slices TDD
+Spec: `waggo-workspace/specs/RF-001-RF-005-recuperacion-y-seguridad-de-cuenta.md` (`Implementada`, 2026-10-27). Reutiliza `IEmailSender` y el código de 6 dígitos del slice de correos reales: vence a los 15 min, 5 intentos fallidos, espera de 60 s entre envíos y solo se guarda su hash. Las respuestas no revelan qué correos tienen cuenta, y cada cambio de contraseña o de correo manda un aviso de seguridad.
+| Slice | Qué entrega | API | Mobile |
+|---|---|---|---|
+| A. Olvidé mi contraseña | `POST /auth/forgot-password`, `POST /auth/reset-password`: el código restablece la contraseña, cierra todas las sesiones y levanta el bloqueo por intentos de login | `User` (`TryIssuePasswordResetCode`, `ResetPassword`), `Identity/Commands/{ForgotPassword, ResetPassword}`, `PasswordStrength`, migración `AddPasswordResetCode` (api#24) | `ForgotPasswordScreen` (`/olvide-contrasena`), `ResetPasswordScreen` (`/restablecer-contrasena`), enlace en `LoginScreen`, `useResendCountdown` (mobile#23) |
+| B. Cerrar sesión | `POST /auth/logout {refreshToken}` revoca ese refresh token (idempotente, anónimo) | `Identity/Commands/Logout` (api#25) | `authApi.logout`: borra la sesión local primero y revoca en la API sin bloquear (mobile#24) |
+| C. Cambiar contraseña | `PUT /users/me/password`: pide la actual, deja abierta la sesión que cambia y cierra las demás | `User.ChangePassword`, `Identity/Commands/ChangePassword`, `RevokeAllForUserExceptAsync` (api#26) | `ChangePasswordScreen` (`/configuracion/contrasena`), entrada en Configuración (mobile#25) |
+| D. Cambiar correo | `POST /users/me/email` manda el código al correo **nuevo**; `POST /users/me/email/confirm` lo aplica, cierra las demás sesiones y avisa al correo anterior | `User` (`RequestEmailChange`, `ConfirmEmailChange`), `Identity/Commands/{RequestEmailChange, ConfirmEmailChange}`, `SessionCloser`, `SecurityNotice`, migración `AddEmailChange` (api#27) | `ChangeEmailScreen` en dos pasos (`/configuracion/correo`) (mobile#26) |
+| E. Cuenta sin confirmar | Login con `Identity.AccountNotConfirmed`: la app pide un código nuevo y abre la pantalla del código | — | `LoginScreen` (`onAccountNotConfirmed`) (mobile#27) |
+
+> [!info] Decisiones tomadas al implementar
+> Una contraseña incorrecta en cambiar contraseña o cambiar correo cuenta para el mismo bloqueo del login (5 intentos, 15 min): un access token robado no debe servir para adivinar la contraseña. Los endpoints de confirmación de cambio de correo y de cambio de contraseña reciben el `refreshToken` de la sesión actual (opcional) para dejarla abierta. Ver la spec.
+
+> [!warning] Probado a mano solo en parte
+> Los endpoints de los slices A y D se recorrieron contra la API local con JWT real y el proveedor `Development`. La app no se probó a mano en el navegador ni con SES real para estos flujos. En Development con `Authentication:UseDevelopmentUser` activo, los endpoints `/users/me/*` responden `Server.Unexpected` (el usuario falso no es un Guid): para probarlos a mano hay que arrancar con `Authentication__UseDevelopmentUser=false`.
 
 ### Transversal — ✅
 | Qué | Dónde | RNF |
@@ -235,3 +242,8 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-envio-de-correos-reales.md` · Config
 - [ ] 🚧 Test de arquitectura que impida referencias cruzadas entre módulos — `ModuleTests` con lista explícita ([[ADR-002 Clean Architecture en el backend|ADR-002]]). En progreso: sin commitear en `.worktrees/api-module-boundaries` (rama `test/module-boundaries`, sin PR).
 - [ ] 🚧 Umbral de cobertura bloqueante en el backend — Domain + Application ≥ 80 % (`scripts/coverage-gate.sh`). En progreso: mismo worktree que `ModuleTests`.
 - [ ] Publicación de imágenes en GHCR (CD-1, ver [[CI-CD]]).
+- [ ] Límite de intentos por IP en `/auth/*` (hoy el límite es por cuenta: 5 intentos por código y bloqueo de login).
+- [ ] El registro revela si un correo ya tiene cuenta (`Identity.EmailAlreadyRegistered`); la recuperación y el reenvío sí responden igual para todos.
+- [ ] Probar a mano en la app, con SES real, los flujos de recuperación y cambio de correo.
+- [ ] Revocar también el access token al cerrar sesión (hoy sigue valiendo hasta que vence, 15 min).
+- [ ] Una prueba de `AddPetScreen` (mobile) falló de forma intermitente en corridas completas locales; no se reprodujo ni se encontró la causa. El timeout por defecto de Jest ya subió a 15 s.
