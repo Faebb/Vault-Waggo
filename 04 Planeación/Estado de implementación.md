@@ -185,6 +185,21 @@ Spec: `waggo-workspace/specs/RF-014-notificaciones-del-recorrido.md`. La tabla `
 | Infrastructure / Api | `messaging.notifications` (migración `AddNotifications`); `GET /notifications`, `POST /notifications/read` | `NotificationEndpointTests` |
 | Mobile | `src/features/notifications` — `NotificationBell` y `NotificationsScreen` | `*.test.ts[x]` junto a cada archivo |
 
+### Correos reales (Amazon SES) y código de 6 dígitos (RF-001 + RF-005) — 🚧 en progreso
+> [!warning] Aún no está en `main` (2026-10-26)
+> PRs abiertos: `waggo-api#22` (envío con SES), `waggo-api#23` (código de 6 dígitos y reenvío, apilado sobre #22), `waggo-mobile#22` (pantalla del código) y `waggo-workspace#23` (spec). Hasta que se mergeen, en `main` el correo de confirmación solo se escribe en el log y la confirmación usa un token largo con `GET /auth/confirm?token=`.
+
+Spec: `waggo-workspace/specs/RF-001-RF-005-envio-de-correos-reales.md` · Configuración de AWS: [[Guía AWS SES - prompt de configuración]]. El correo sale por Amazon SES (`us-east-1`) detrás de `IEmailSender`; la confirmación pasa a un código de 6 dígitos que vence a los 30 min, se invalida tras 5 intentos fallidos y se puede reenviar (espera de 60 s). Cambia el contrato: `POST /auth/confirm {email, code}` reemplaza al `GET` y aparece `POST /auth/resend-confirmation {email}`.
+| Capa | Archivos | Pruebas |
+|---|---|---|
+| Infrastructure | `Options/Identity/{EmailOptions, EmailProvider, SesOptions, EmailOptionsValidator}`, `Services/Identity/SesEmailSender` (`AWSSDK.SimpleEmailV2`), selección por `Email:Provider` en `DependencyInjection` | `SesEmailSenderTests`, `EmailOptionsValidatorTests` |
+| Api | `EmailStartupGuard` (Production exige `Ses`), `IdentityEndpoints` (`POST /confirm`, `POST /resend-confirmation`), `ConfirmRequest`, `ResendConfirmationRequest` + validadores | `EmailStartupGuardTests`, `ConfirmRequestValidatorTests`, `ResendConfirmationRequestValidatorTests`, `IdentityEndpointTests` |
+| Application / Domain | `User` (`ConfirmationAttempts`, `Confirm`, `TryIssueConfirmationCode`), `ConfirmEmail*`, `ResendConfirmation/*`, `ConfirmationEmail`, `ITokenGenerator.GenerateNumericCode`, `EmailErrors.SendFailed`, `IdentityErrors.ConfirmationAttemptsExceeded`; `RegisterHandler` envía antes de guardar; migración `AddConfirmationAttempts` | `UserTests`, `ConfirmEmailHandlerTests`, `ResendConfirmationHandlerTests`, `RegisterHandlerTests`, `SecureTokenGeneratorTests` |
+| Mobile | `src/features/auth` — `authApi` (`confirmEmail(email, code)`, `resendConfirmation`), `useAuth`, `ConfirmScreen` (código de 6 dígitos y "Reenviar código" con cuenta regresiva de 60 s) | `authApi.test.ts`, `ConfirmScreen.test.tsx` |
+
+> [!info] Pendiente de este slice
+> Prueba manual con SES real en *sandbox*, registrar el dominio y salir del sandbox (para escribirle a cualquier persona), configuration set con SNS para rebotes y quejas, y el correo de recuperación de contraseña (reutilizará `IEmailSender`).
+
 ### Transversal — ✅
 | Qué | Dónde | RNF |
 |---|---|---|
