@@ -26,6 +26,7 @@ Región `us-east-1`. Un solo ambiente (producción del piloto). Todo se creó co
 | `WaggoWeb` | S3 privado + CloudFront en `app.mywaggo.com` y el rol de despliegue de `waggo-mobile` | SPA: 403/404 devuelven `index.html` |
 | `WaggoSiteCertificate` | Certificado ACM para `mywaggo.com` y `www` | Validación DNS manual en Cloudflare |
 | `WaggoSite` | S3 privado + CloudFront en `mywaggo.com` y `www` con la landing, privacidad y términos | Los archivos salen de `waggo-infra/site/` |
+| `WaggoEmail` | Configuration Set de SES `waggo-transactional` con rebotes, quejas y rechazos publicados en un tema SNS que avisa por correo | La API envía con él (`Email__Ses__ConfigurationSet`); el correo se pasa con `-c budgetEmail=…` |
 | `WaggoBudget` | Presupuesto mensual de US$60 con alertas (80 % gastado, 100 % pronosticado, 100 % gastado) | El correo se pasa con `-c budgetEmail=…` |
 | `CDKToolkit` | Bootstrap de CDK | — |
 
@@ -82,12 +83,11 @@ En `waggo-infra`, siempre en este orden: `cdk diff` → revisar → `cdk deploy 
 - La API manda con el rol de la tarea ECS; no usa claves.
 - **Acceso a producción:** la solicitud estuvo en estado *DENIED* porque `mywaggo.com` no abría ningún sitio y el caso pedía más datos. Se publicó el sitio y se respondió el caso con los datos pedidos (sitio, tipo de correo, volumen, origen de los destinatarios, rebotes y quejas, y un ejemplo). Una solicitud denegada **no se puede reenviar por API** (`ConflictException`); se responde en el caso de AWS Support.
 - Mientras SES siga en *sandbox*, solo se entrega a direcciones verificadas; el registro de otras personas no recibe el código. Revisar con `GetAccount` (`ProductionAccessEnabled`).
-- La lista de supresión de cuenta está activa para rebotes y quejas. **Pendiente:** publicar esos eventos en SNS con un *Configuration Set*.
+- La lista de supresión de cuenta está activa para rebotes y quejas, y el stack `WaggoEmail` publica rebotes, quejas y rechazos en SNS (la API envía con el Configuration Set `waggo-transactional`). Quien recibe los avisos debe **confirmar la suscripción** de SNS la primera vez.
 - `contacto@mywaggo.com`: Cloudflare Email Routing reenvía al correo del proyecto. Responder desde Gmail sale con la cuenta personal, no con `contacto@`.
 
 ## Pendientes
 - [ ] Respuesta de AWS al caso de acceso a producción de SES.
-- [ ] Rebotes y quejas de SES a SNS (Configuration Set).
 - [ ] EAS Build para las apps iOS y Android (CD-3).
 - [ ] Revisión legal de la política de privacidad y de los términos (hoy son un borrador de piloto).
 - [ ] Endurecer la conexión a RDS (validar el certificado en vez de confiar en él).
