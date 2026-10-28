@@ -1,11 +1,11 @@
 ---
-title: ADR-020 Perfil de usuario como extensión de Identity
+title: ADR-021 Perfil de usuario como extensión de Identity
 tags: [waggo, adr, identity]
 status: Aceptada
 date: 2026-10-24
 ---
 
-# ADR-020 Perfil de usuario como extensión de Identity
+# ADR-021 Perfil de usuario como extensión de Identity
 
 Volver a [[00 - MOC Waggo]] · Guía: [[Backend - Clean Architecture]] · Spec: `waggo-workspace/specs/UX-003-perfil-y-configuracion-de-cuenta.md`
 
