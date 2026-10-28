@@ -50,6 +50,9 @@ flowchart LR
 - Configuración solo por variables de entorno (12-factor).
 - Imágenes etiquetadas con el SHA del commit en CI.
 
+## Producción (AWS)
+El piloto corre en AWS (ECS Fargate para la API, RDS PostgreSQL, S3 + CloudFront para la web y el sitio público). La decisión está en [[ADR-020 Despliegue público en AWS con ECS Fargate y CDK|ADR-020]] y la operación en [[Despliegue en AWS - Guía de operación]]. Las imágenes de producción viven en **Amazon ECR** (no en GHCR) y se publican desde el CI.
+
 ## Próximos pasos
-- Registro de imágenes: GitHub Container Registry (`ghcr.io/faebb/...`).
-- Destino del piloto: por decidir (Azure Container Apps, Railway, Fly.io o VPS con Compose).
+- Apps iOS y Android con EAS Build (CD-3, ver [[CI-CD]]).
+- Staging cuando haya usuarios reales.

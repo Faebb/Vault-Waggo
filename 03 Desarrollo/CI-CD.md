@@ -23,8 +23,8 @@ flowchart LR
 ## Fases siguientes
 | Fase | Qué agrega |
 |---|---|
-| CD-1 | Publicar imágenes en `ghcr.io/faebb/waggo-api` y `waggo-web` al hacer merge a `main`. |
-| CD-2 | Despliegue automático a un entorno *staging*. |
+| CD-1 ✅ | Publicar imágenes al hacer merge a `main`: hecho en **Amazon ECR** (en vez de GHCR), con la etiqueta del SHA ([[ADR-020 Despliegue público en AWS con ECS Fargate y CDK|ADR-020]]). |
+| CD-2 ✅ | Despliegue automático a producción del piloto en AWS (API con migraciones como paso del despliegue, y web a S3 + CloudFront), con OIDC y sin claves. Un solo ambiente; *staging* queda para más adelante. Ver [[Despliegue en AWS - Guía de operación]]. |
 | CD-3 | EAS Build + EAS Update para builds móviles internos (TestFlight / Play interno). |
 
 > [!tip] Protección de rama

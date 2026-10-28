@@ -149,6 +149,19 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrad
 | Api | `Waggo.Api/Endpoints/Identity/UsersEndpoints.cs` — `GET/PUT /api/v1/users/me` (cualquier rol autenticado) | pruebas de integración de `Users` |
 | Mobile | `src/features/profile/` — `profileApi` (`getMyProfile`, `updateMyProfile`), `useMyProfile`, `SettingsScreen` (resumen + entrada "Información personal"), `PersonalInfoScreen`, `EditProfileScreen` | `*.test.ts[x]` junto a cada archivo |
 
+### UX-003 Perfil y configuración de cuenta — ✅ slice TDD
+No es un RF del SRS: extiende `Identity` (RF-001/ADR-016) en vez de ampliar el contrato de registro. Spec: `waggo-workspace/specs/UX-003-perfil-y-configuracion-de-cuenta.md` · Decisión: [[ADR-021 Perfil de usuario como extensión de Identity|ADR-021]].
+| Capa | Archivos | Pruebas |
+|---|---|---|
+| Domain | `User.{FullName, Phone, UpdateProfile, ChangePassword}`; 4 errores nuevos en `IdentityErrors` | `UserTests` (casos nuevos) |
+| Application | `Identity/{PasswordPolicy, UserProfileResponse}`, `Identity/Queries/GetMyProfile/`, `Identity/Commands/{UpdateProfile, ChangePassword}/`; `RegisterCommandValidator` ahora delega en `PasswordPolicy` | `GetMyProfileHandlerTests`, `UpdateProfileHandlerTests`, `ChangePasswordHandlerTests` |
+| Infrastructure | `UserConfiguration` (`full_name`, `phone`), migración `AddUserProfileFields` | vía integración |
+| Api | `Waggo.Api/Endpoints/Users/` — `GET/PATCH /api/v1/users/me`, `POST /api/v1/users/me/password` (cualquier usuario autenticado, sin rol específico) | `UsersEndpointTests`, `UpdateProfileRequestValidatorTests`, `ChangePasswordRequestValidatorTests` |
+| Mobile | `src/features/profile/` — `ProfileScreen` (`/perfil`), `EditProfileScreen` (`/perfil/editar`), `ChangePasswordScreen` (`/perfil/contrasena`); `httpClient.patch` nuevo; enlace "Perfil" en `_layout.tsx` solo con sesión; reutiliza `logout()` de `features/auth` | `*.test.ts[x]` junto a cada archivo |
+
+> [!warning] Discrepancia vault ↔ código
+> Esta nota ya listaba un slice "Recuperación de contraseña (RF-001 + RF-005)" con `Identity/PasswordPolicy` compartida. Al implementar UX-003 se verificó que ese código **no existe** en `waggo-api` (ni `ForgotPassword`/`ResetPassword`, ni la spec correspondiente en `specs/`). `Identity/PasswordPolicy` se creó de cero en este slice; si la recuperación de contraseña se retoma, debe reutilizarla. Ver detalle en la spec UX-003.
+
 ### RF-002 + RF-003 Paseadores verificados — ✅ slice TDD (verificación manual)
 Spec: `waggo-workspace/specs/RF-002-RF-003-paseadores-verificados.md`. Mientras se elige el proveedor de identidad y antecedentes, un administrador aprueba o rechaza. Foto y documento escaneado quedan para un slice con almacenamiento de archivos.
 | Capa | Archivos | Pruebas |
@@ -226,6 +239,18 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-recuperacion-y-seguridad-de-cuenta.md
 | Usuarios de prueba en Development/Testing (DEV-001, `Seed:Users`): admin `admin@waggo.local` / `Admin1234`, dueño `dueno@waggo.local` / `Dueno1234`, paseador aprobado `paseador@waggo.local` / `Paseador1234` — ver [[API - Pipeline, seguridad y errores#Usuarios de prueba (solo Development y Testing)]]. (PR api#21, workspace#22, mergeados 2026-10-26) | `Waggo.Domain/Entities/Identity/User.Seed`, `Waggo.Infrastructure/{Options,Services}/Identity/{SeedUsersOptions,SeedUserOptions,DevelopmentUsersSeeder}`; spec `waggo-workspace/specs/DEV-001-usuarios-de-prueba.md` | `DevelopmentUsersSeederTests`, `SeededUsersTests`, `ProductionSettingsTests` |
 | Sistema de diseño "Seashell & Sapphire" — paleta clara por defecto (oscuro vía el selector), Baloo 2 + Inter, radios más redondeados, íconos permitidos — reemplaza el tema oscuro+amarillo+Helvetica | `waggo-mobile/src/shared/ui/theme.ts` (+ `Button`, `_layout.tsx`) · [[ADR-018 Nuevo sistema de diseño Seashell y Sapphire|ADR-018]] (reemplaza [[ADR-013 Tema oscuro mobile-first con amarillo y Helvetica|ADR-013]]) | — |
 | Navegación por pestañas inferior (dueño `(tabs)`: Inicio · Paseos · Mascotas · Configuración; paseador `(walker-tabs)`: Inicio · Configuración) y componente `Skeleton` compartido reemplazando `ActivityIndicator` en Inicio/Configuración/Mascotas/Paseos, con mensaje de error si falla la carga; "Perfil" se renombra a "Configuración" (`ProfileMenuScreen` → `SettingsScreen`) | `waggo-mobile/src/app/(tabs)/`, `src/app/(walker-tabs)/`, `src/shared/ui/Skeleton.tsx`, `src/features/profile/screens/SettingsScreen.tsx` · [[ADR-019 Navegación por pestañas y estados de carga con skeletons|ADR-019]] | — |
+
+### INF-001 Despliegue público en AWS — ✅ (producción del piloto)
+No es un RF del SRS: es infraestructura. Spec: `waggo-workspace/specs/INF-001-despliegue-publico-en-aws.md` · Decisión: [[ADR-020 Despliegue público en AWS con ECS Fargate y CDK|ADR-020]] · Operación: [[Despliegue en AWS - Guía de operación]].
+| Capa | Qué | Dónde |
+|---|---|---|
+| Infraestructura | Stacks CDK de red, datos, registro, certificados, pipeline OIDC, API, web, sitio público y presupuesto | repo privado `waggo-infra` (pruebas Jest + CI con `cdk synth`) |
+| API | `deploy.yml`: imagen a ECR, migraciones como paso (`--migrate-only`), servicio ECS y smoke test | `waggo-api/.github/workflows/deploy.yml` |
+| Web | `deploy.yml` (`deploy-web`): `expo export`, S3, invalidación de CloudFront y smoke test | `waggo-mobile/.github/workflows/deploy.yml` |
+| Sitio público | Landing, privacidad y términos en `mywaggo.com` | `waggo-infra/site/` |
+
+> [!warning] Pendiente
+> Acceso a producción de SES (solicitud en revisión: hasta entonces el correo solo llega a direcciones verificadas), eventos de rebote y queja a SNS, EAS Build (CD-3) y revisión legal de privacidad y términos.
 
 ## Pendiente por RF
 | RF | Módulo | Sprint |
