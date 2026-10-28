@@ -137,8 +137,28 @@ Spec: `waggo-workspace/specs/RF-001-RF-005-identidad-y-login.md` · Decisión: [
 > [!info] Roles
 > Todo `User` confirmado es `owner`; `walker` se añade si tiene un `WalkerProfile` aprobado (RF-002/RF-003); `admin` es una bandera manual sembrada por migración.
 
-> [!warning] ADR-017 — solo la mitad ya está implementada
-> Se retiró el 2FA por correo (✅, arriba). La **federación OAuth con Google y Microsoft** que motivó esa misma decisión **no está implementada todavía** en ningún repo (no hay `identity.external_logins`, `ExternalLogin`, ni endpoints `/auth/login/{google,microsoft}`) — spec lista para construir: `waggo-workspace/specs/RF-001-RF-005-login-social-google-microsoft.md` (estado `Lista`).
+> [!info] ADR-017 — 2FA retirado ✅ y login con Google (web) ✅; falta Microsoft
+> Se retiró el 2FA por correo (arriba) y la federación con **Google ya funciona en la web** (sección siguiente). Siguen pendientes **Microsoft** y el login nativo de Google en iOS/Android (necesita el development build de EAS) — spec: `waggo-workspace/specs/RF-001-RF-005-login-social-google-microsoft.md` (estado `En progreso`).
+
+### RF-001 + RF-005 Login con Google (web) — ✅ slice TDD
+Spec: `waggo-workspace/specs/RF-001-RF-005-login-social-google-microsoft.md` · Decisión: [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]]. PRs: waggo-api #32, waggo-mobile #31, waggo-infra #7. Desplegado en producción.
+| Capa | Archivos | Pruebas |
+|---|---|---|
+| Domain | `Entities/Identity/ExternalLogin`, `Enums/Identity/ExternalProvider`, `User.RegisterExternal` y `User.ConfirmByExternalProvider`, errores `Identity.{ExternalTokenInvalid, ExternalEmailNotVerified, ExternalProviderUnavailable}` | `ExternalLoginTests`, `UserExternalTests` |
+| Application | `Identity/Commands/LoginWithExternalProvider/` (un caso de uso por proveedor); puertos `IExternalIdentityProvider` e `IExternalLoginRepository` | `LoginWithExternalProviderHandlerTests` |
+| Infrastructure | `GoogleIdentityProvider` (firma RS256 con las claves rotativas de Google, emisor, audiencia y vigencia), `ExternalLoginRepository`, `GoogleAuthOptions` (`Authentication:Google:ClientIds`), tabla `identity.external_logins` (migración `AddExternalLogins`) | `GoogleIdentityProviderTests` (claves RSA de prueba) |
+| Api | `POST /api/v1/auth/login/google` (anónimo) + `GoogleLoginRequestValidator` | `GoogleLoginEndpointTests` (proveedor falso, PostgreSQL real), `GoogleLoginRequestValidatorTests` |
+| Mobile (web) | `src/shared/auth/{googleIdentity, GoogleSignInButton}`, `authApi.googleLogin`, `useGoogleLogin`, botón "Continuar con Google" en `LoginScreen` y `RegisterScreen` | `googleIdentity.test.ts`, `GoogleSignInButton.test.tsx`, pruebas de las dos pantallas y de `authApi` |
+
+> [!important] Decisiones de seguridad (cambian la spec original)
+> - Se vincula por correo **solo la primera vez y solo si Google lo marca verificado**; después se entra por el id del proveedor (`sub`), nunca por correo.
+> - **Pre-secuestro:** si el correo tenía una cuenta que nunca se confirmó, se confirma al entrar con Google y su contraseña anterior se reemplaza por una inutilizable.
+> - Las cuentas creadas con Google no tienen contraseña; pueden fijar una con "olvidé mi contraseña".
+> - Sin IDs de cliente configurados, la API rechaza todo token.
+> - En **Microsoft** no se vinculará solo por correo (su documentación dice que el claim `email` no está garantizado ni es inmutable): se identificará por `oid`/`sub`. Política exacta pendiente del PO.
+
+> [!warning] Mientras la app de Google esté en modo prueba
+> Solo entran los usuarios de prueba agregados en la pantalla de consentimiento (hasta 100). Para abrirla a cualquiera hay que **publicarla** en Google Cloud; con permisos básicos no exige revisión. Ver [[Despliegue en AWS - Guía de operación#Login con Google]].
 
 ### Perfil de usuario (nombre y celular) — ✅ slice TDD (parcial)
 Spec: `waggo-workspace/specs/RF-001-RF-005-perfil-de-usuario.md` (estado `Borrador`: lo que falta es proveedores vinculados, paseador verificado y eliminar cuenta; cambiar contraseña, cambiar correo y cerrar sesión ya están en la spec de seguridad de la cuenta). Este slice (nombre completo y celular) ya se implementó en ambos repos **sin pasar antes por `Lista`** — ver desviación reportada.
@@ -255,7 +275,7 @@ No es un RF del SRS: es infraestructura. Spec: `waggo-workspace/specs/INF-001-de
 ## Pendiente por RF
 | RF | Módulo | Sprint |
 |---|---|---|
-| RF-001 + RF-005 login social (Google, Microsoft) — spec `Lista`, sin implementar (ADR-017) | `Identity` | 1 |
+| RF-001 + RF-005 login social: **Microsoft** y Google en iOS/Android (Google en la web ya está) — spec `En progreso` (ADR-017) | `Identity` | 1 |
 | RF-003 (proveedor de verificación, foto y documento escaneado) | `Identity` | 2 |
 | RF-014 push (Expo Push o FCM/APNs; la bandeja ya existe) | `Messaging` | 6 |
 | RF-015 – RF-018 (proveedor real, tarjetas y cuentas de paseadores) | `Payments` | 7 |

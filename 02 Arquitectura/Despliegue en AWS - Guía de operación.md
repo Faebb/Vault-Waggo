@@ -86,6 +86,16 @@ En `waggo-infra`, siempre en este orden: `cdk diff` → revisar → `cdk deploy 
 - La lista de supresión de cuenta está activa para rebotes y quejas, y el stack `WaggoEmail` publica rebotes, quejas y rechazos en SNS (la API envía con el Configuration Set `waggo-transactional`). Quien recibe los avisos debe **confirmar la suscripción** de SNS la primera vez.
 - `contacto@mywaggo.com`: Cloudflare Email Routing reenvía al correo del proyecto. Responder desde Gmail sale con la cuenta personal, no con `contacto@`.
 
+## Login con Google
+Decisión: [[ADR-017 Login sin 2FA obligatorio y federación OAuth con Google y Microsoft|ADR-017]]. La API valida el `idToken` que Google entrega al navegador (`POST /auth/login/google`) contra las claves públicas de Google; no guarda ningún secreto de Google.
+
+- **Google Cloud:** proyecto "Waggo" con pantalla de consentimiento externa (permisos básicos `openid`, `email`, `profile`) y un ID de cliente de tipo "Aplicación web" con los orígenes `https://app.mywaggo.com` y el de desarrollo local. Las URIs de redirección registradas son provisionales: el botón de Google Identity Services no las usa.
+- **Dónde vive el ID de cliente:** es un valor **público** (aparece en cada login). Está en la configuración de `waggo-infra` (variable `Authentication__Google__ClientIds__0` de la tarea de la API) y en el workflow de despliegue de `waggo-mobile` (`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`). No hay secreto del cliente en ningún lado.
+- **Modo prueba:** la app de Google está en estado "Prueba": solo entran los usuarios de prueba (se agregan en Google Auth Platform → Público). Para abrirla al público hay que **publicar** la app; con permisos básicos no pide revisión de Google.
+- **Un ID de cliente por plataforma:** web ya existe; Android e iOS se crean cuando haya build de EAS (necesitan la huella de firma y el identificador del paquete). Se agregan a la lista `Authentication__Google__ClientIds` en `waggo-infra`.
+- **Si Google no responde** al leer sus claves, la API contesta 503 (`Identity.ExternalProviderUnavailable`); si no hay IDs de cliente configurados, rechaza todo token.
+- **Cambios de configuración en Google** pueden tardar de 5 minutos a unas horas en aplicarse.
+
 ## Pendientes
 - [ ] Respuesta de AWS al caso de acceso a producción de SES.
 - [ ] EAS Build para las apps iOS y Android (CD-3).
